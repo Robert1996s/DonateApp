@@ -11,5 +11,7 @@ class MainActivity : AppCompatActivity() {
         val hej = 0
 
         hej + 1
+
+        hej + 2
     }
 }
