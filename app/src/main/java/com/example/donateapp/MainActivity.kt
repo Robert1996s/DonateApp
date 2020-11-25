@@ -10,6 +10,8 @@ class MainActivity : AppCompatActivity() {
         val hej = 0
 
         hej + 1
+
+        println("${hej}")
         
     }
 }
