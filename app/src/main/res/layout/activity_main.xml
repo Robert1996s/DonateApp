@@ -7,21 +7,11 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/login_button"
         android:layout_width="163dp"
         android:layout_height="56dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="109dp"
         android:text="LOGIN"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="209dp"
-        android:layout_height="37dp"
-        android:layout_marginBottom="40dp"
-        android:text="Not a member? Sign up know!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -34,7 +24,7 @@
         android:ems="10"
         android:hint="password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/login_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
