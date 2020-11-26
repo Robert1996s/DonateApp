@@ -14,8 +14,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var db: FirebaseFirestore
     lateinit var auth: FirebaseAuth
 
-    lateinit var userTextView: EditText
-    lateinit var passwordTextView: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
