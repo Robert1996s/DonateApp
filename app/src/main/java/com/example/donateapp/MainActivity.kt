@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
             println("!!!Logged IN")
             //val intent = Intent(this,"Inloggade sidan"::class.java)
             //startActivity(intent)
-
         }
         else {
             //Not logged in
