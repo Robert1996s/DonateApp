@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -14,7 +16,12 @@ import com.google.firebase.ktx.Firebase
 class MainActivity : AppCompatActivity() {
 
     lateinit var db: FirebaseFirestore
+
+    
+    lateinit var recyclerView: RecyclerView
+
     private lateinit var auth: FirebaseAuth
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
-        var shoppingItems = mutableListOf<UserData>()
+        var shoppingItems = mutableListOf<Items>()
 
         val loginButton = findViewById<Button>(R.id.login_button)
 
@@ -30,7 +37,16 @@ class MainActivity : AppCompatActivity() {
             toUserSignUp()
         }
 
+    }
+
         val currentUser: FirebaseUser? = auth.currentUser
+
+
+        val intent = Intent(this, FirstPage::class.java)
+        startActivity(intent)
+    }
+
+}
 
         if (currentUser != null) {
             //User is logged in
@@ -50,4 +66,3 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 }
-
