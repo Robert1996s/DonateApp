@@ -7,24 +7,25 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var db: FirebaseFirestore
-    lateinit var auth: FirebaseAuth
+
+    
     lateinit var recyclerView: RecyclerView
 
-    lateinit var userTextView: EditText
-    lateinit var passwordTextView: EditText
+    private lateinit var auth: FirebaseAuth
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
@@ -38,7 +39,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun toUserSignUp() {
+        val currentUser: FirebaseUser? = auth.currentUser
+
 
         val intent = Intent(this, FirstPage::class.java)
         startActivity(intent)
@@ -46,7 +48,21 @@ class MainActivity : AppCompatActivity() {
 
 }
 
+        if (currentUser != null) {
+            //User is logged in
+            println("!!!Logged IN")
+            //val intent = Intent(this,"Inloggade sidan"::class.java)
+            //startActivity(intent)
+        }
+        else {
+            //Not logged in
+            println("!!! NOT Logged IN")
+        }
 
+    } //ON CREATE
 
-
-
+    private fun toUserSignUp() {
+        val intent = Intent(this, UserSignUp::class.java)
+        startActivity(intent)
+    }
+}
