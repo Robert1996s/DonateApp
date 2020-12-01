@@ -7,10 +7,10 @@
     tools:context=".FirstPage">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/donate_list"
-        tools:listitem="@layout/row_card"
+        android:id="@+id/test_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="170dp"
+        tools:layout_editor_absoluteY="122dp"
+        tools:listitem="@layout/test_card"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,10 +22,16 @@ class FirstPage : AppCompatActivity() {
 
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
+        val recyclerView = findViewById<RecyclerView>(R.id.test_list)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
         val itemList = ArrayList<Items>()
+        val testList = mutableListOf<Items>()
+        val adapter = ItemAdapter(this, testList)
+        recyclerView.adapter = adapter
 
 
+        itemList.add(Items("hey", "en sak"))
 
 
         //val donateRecyclerview = findViewById<RecyclerView>(R.id.donate_list)
@@ -43,13 +49,10 @@ class FirstPage : AppCompatActivity() {
             docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null){
-                    Log.d("exists","Data: ${document.data}")
+                    Log.d("exists","Data: ${document}")
 
                 }
-                println("!!!Done Getting data")
-
             }
-
-
+        println("!!!Done Getting data")
     }
 }
