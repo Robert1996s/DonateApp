@@ -11,6 +11,8 @@ class ItemAdapter (
     private val context: Context,
     private val items: List<Items>) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
+    //private var itemList: List<Items> = ArrayList()
+
     private val layoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -24,8 +26,12 @@ class ItemAdapter (
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.titleText.text = item.title
-        holder.descriptionText.text = item.description
+        val itemTitle = item.title
+        val itemDesc = item.description
+        holder.titleText.text = itemTitle
+        holder.descriptionText.text = itemDesc
+
+
     }
 
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
