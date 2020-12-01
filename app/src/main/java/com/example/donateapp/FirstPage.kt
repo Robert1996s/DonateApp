@@ -26,7 +26,6 @@ class FirstPage : AppCompatActivity() {
         setContentView(R.layout.activity_first_page)
 
 
-
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         val adapter = ItemAdapter(this, testList)
@@ -38,13 +37,6 @@ class FirstPage : AppCompatActivity() {
         val textDescription = findViewById<TextView>(R.id.description_text)
 
 
-
-
-
-
-
-
-
         val docRef = db.collection("items")
         docRef.addSnapshotListener{ snapshot, e ->
             if( snapshot != null ) {
@@ -53,31 +45,15 @@ class FirstPage : AppCompatActivity() {
                     val temp = document.toObject(Items::class.java)
                     if(temp != null)
                         testList.add(temp)
-                    adapter.notifyDataSetChanged()
                     println("!!!${temp?.title}")
                 }
+                adapter.notifyDataSetChanged()
             }
         }
 
-
-
-
-
-
-
-        getData()
+        println("!!!Logged In As: ${auth.currentUser?.email}")
         getItemData()
 
-    }
-
-    private fun getData() {
-        val docRef = db.collection("items")
-            docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null){
-                }
-            }
-        setData ()
     }
 
     private fun setData () {
@@ -87,7 +63,6 @@ class FirstPage : AppCompatActivity() {
                 for (document in documentSnapshot.documents) {
                     val newItem = document!!.toObject(Items::class.java)
                     if (newItem != null) {
-
                     }
                 }
             }
@@ -101,10 +76,10 @@ class FirstPage : AppCompatActivity() {
                     val temp = document.toObject(Items::class.java)
                     if (temp != null){
                         testList.add(temp)
-                        println("!!!${temp.title}")
                     }
                 }
             }
+        setData ()
         println("!!!Done Getting data")
     }
 }
