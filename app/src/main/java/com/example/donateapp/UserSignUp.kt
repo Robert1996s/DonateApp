@@ -36,8 +36,7 @@ class UserSignUp : AppCompatActivity() {
 
     private fun createAccount(name: String, password:String, email:String) {
         if (name == "" || email == "" || password == "") {
-            Toast.makeText(this, "Not Registred", Toast.LENGTH_LONG)
-                .show()
+            Toast.makeText(this, "Wrong Input", Toast.LENGTH_LONG).show()
         }
         else {
             auth.createUserWithEmailAndPassword(email, password)
@@ -49,7 +48,7 @@ class UserSignUp : AppCompatActivity() {
                         updateUI(user)
                     }
                 }
-        }
+            }
     }
 
     private fun updateUI(user: FirebaseUser?) {

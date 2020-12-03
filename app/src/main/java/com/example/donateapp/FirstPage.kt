@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Adapter
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -18,16 +20,13 @@ class FirstPage : AppCompatActivity() {
     private var itemList = mutableListOf<Items>()
     private var itemUid = ""
 
-
-    
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_page)
 
-
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
+
         val adapter = ItemAdapter(this, itemList)
         val recyclerView = findViewById<RecyclerView>(R.id.test_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -35,6 +34,7 @@ class FirstPage : AppCompatActivity() {
 
         val textTitle = findViewById<TextView>(R.id.title_text)
         val textDescription = findViewById<TextView>(R.id.description_text)
+        val homeIcon = findViewById<ImageView>(R.id.home_icon)
 
 
         val docRef = db.collection("items")
@@ -45,41 +45,24 @@ class FirstPage : AppCompatActivity() {
                     val temp = document.toObject(Items::class.java)
                     if(temp != null)
                         itemList.add(temp)
-                    println("!!!${temp?.title}")
                 }
                 adapter.notifyDataSetChanged()
             }
         }
-
         println("!!!Logged In As: ${auth.currentUser?.email}")
-        getItemData()
-
+        getData()
     }
 
-    private fun setData () {
+    private fun getData () {
         val itemRef = db.collection("items")
         itemRef.get()
             .addOnSuccessListener { documentSnapshot ->
                 for (document in documentSnapshot.documents) {
                     val newItem = document!!.toObject(Items::class.java)
                     if (newItem != null) {
+                        println("!!!${newItem?.title}")
                     }
                 }
             }
-    }
-
-    private fun getItemData() {
-        val docRef = db.collection("items")
-        docRef.get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val temp = document.toObject(Items::class.java)
-                    if (temp != null){
-                        itemList.add(temp)
-                    }
-                }
-            }
-        setData ()
-        println("!!!Done Getting data")
     }
 }
