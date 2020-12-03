@@ -30,8 +30,6 @@ class ItemAdapter (
         val itemDesc = item.description
         holder.titleText.text = itemTitle
         holder.descriptionText.text = itemDesc
-
-
     }
 
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {

@@ -15,7 +15,7 @@ class FirstPage : AppCompatActivity() {
 
     lateinit var db: FirebaseFirestore
     lateinit var auth: FirebaseAuth
-    private var testList = mutableListOf<Items>()
+    private var itemList = mutableListOf<Items>()
     private var itemUid = ""
 
 
@@ -28,7 +28,7 @@ class FirstPage : AppCompatActivity() {
 
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
-        val adapter = ItemAdapter(this, testList)
+        val adapter = ItemAdapter(this, itemList)
         val recyclerView = findViewById<RecyclerView>(R.id.test_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
@@ -40,11 +40,11 @@ class FirstPage : AppCompatActivity() {
         val docRef = db.collection("items")
         docRef.addSnapshotListener{ snapshot, e ->
             if( snapshot != null ) {
-                testList.clear()
+                itemList.clear()
                 for (document in snapshot.documents) {
                     val temp = document.toObject(Items::class.java)
                     if(temp != null)
-                        testList.add(temp)
+                        itemList.add(temp)
                     println("!!!${temp?.title}")
                 }
                 adapter.notifyDataSetChanged()
@@ -75,7 +75,7 @@ class FirstPage : AppCompatActivity() {
                 for (document in documents) {
                     val temp = document.toObject(Items::class.java)
                     if (temp != null){
-                        testList.add(temp)
+                        itemList.add(temp)
                     }
                 }
             }
