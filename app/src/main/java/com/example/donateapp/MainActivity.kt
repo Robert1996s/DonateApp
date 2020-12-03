@@ -8,6 +8,7 @@ import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
@@ -24,25 +25,35 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
-
-        var shoppingItems = mutableListOf<Items>()
 
         val loginButton = findViewById<Button>(R.id.login_button)
 
         loginButton.setOnClickListener {
-            toUserSignUp()
+            toUserLogin()
+        }
+
+        val signUpButton = findViewById<Button>(R.id.sign_up_button)
+
+        signUpButton.setOnClickListener {
+            touUserSignUp()
         }
 
     }
 
-    private fun toUserSignUp() {
+    private fun toUserLogin() {
 
         val intent = Intent(this, FirstPage::class.java)
         startActivity(intent)
     }
+
+    private fun touUserSignUp() {
+
+        val intent = Intent(this, UserSignUp::class.java)
+        startActivity(intent)
+    }
+
 
 }
 
