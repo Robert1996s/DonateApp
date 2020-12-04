@@ -16,10 +16,6 @@ import com.google.firebase.ktx.Firebase
 class MainActivity : AppCompatActivity() {
 
     lateinit var db: FirebaseFirestore
-
-    
-    lateinit var recyclerView: RecyclerView
-
     private lateinit var auth: FirebaseAuth
 
 
@@ -30,36 +26,39 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         var shoppingItems = mutableListOf<Items>()
-
         val loginButton = findViewById<Button>(R.id.login_button)
+        val signUpButton = findViewById<Button>(R.id.button_signup)
 
         loginButton.setOnClickListener {
-            toUserSignUp()
+            toFirstPage()
         }
 
-    }
+        signUpButton.setOnClickListener {
+            toUserSignUp()
+        }
 
         val currentUser: FirebaseUser? = auth.currentUser
 
 
-        val intent = Intent(this, FirstPage::class.java)
-        startActivity(intent)
-    }
-
-}
-
         if (currentUser != null) {
             //User is logged in
             println("!!!Logged IN")
-            //val intent = Intent(this,"Inloggade sidan"::class.java)
-            //startActivity(intent)
+            val intent = Intent(this, FirstPage::class.java)
+            startActivity(intent)
         }
-        else {
-            //Not logged in
-            println("!!! NOT Logged IN")
-        }
+        else
+    {
+        //Not logged in
+        println("!!! NOT Logged IN")
+    }
+
 
     } //ON CREATE
+
+    private fun toFirstPage() {
+        val intent = Intent(this, FirstPage::class.java)
+        startActivity(intent)
+    }
 
     private fun toUserSignUp() {
         val intent = Intent(this, UserSignUp::class.java)
