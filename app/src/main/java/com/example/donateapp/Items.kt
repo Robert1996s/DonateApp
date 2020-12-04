@@ -1,7 +1,7 @@
 package com.example.donateapp
 
 class Items ( val title : String? = null,
-              val description : String? = null,
-              val image : Int = 0 ) {
-
+              val description : String? = null
+              //val image : Int
+    ) {
 }
