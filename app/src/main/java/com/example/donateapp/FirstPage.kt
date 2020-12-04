@@ -36,6 +36,8 @@ class FirstPage : AppCompatActivity() {
         val textDescription = findViewById<TextView>(R.id.description_text)
         val homeIcon = findViewById<ImageView>(R.id.home_icon)
 
+        //just for commit
+
 
         val docRef = db.collection("items")
         docRef.addSnapshotListener{ snapshot, e ->
