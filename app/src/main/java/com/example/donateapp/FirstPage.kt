@@ -1,5 +1,6 @@
 package com.example.donateapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -32,12 +34,27 @@ class FirstPage : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-        val textTitle = findViewById<TextView>(R.id.title_text)
-        val textDescription = findViewById<TextView>(R.id.description_text)
-        val homeIcon = findViewById<ImageView>(R.id.home_icon)
+        //val bottomHome = findViewById<TextView>(R.id.title_text)
+        //val textDescription = findViewById<TextView>(R.id.addButton)
+        //val homeIcon = findViewById<ImageView>(R.id.home_icon)
+
+        val bottomNavigation : BottomNavigationView = findViewById(R.id.bottom_navigation)
+
+
+        bottomNavigation.setOnNavigationItemSelectedListener { item ->
+            when(item.itemId) {
+                R.id.addButton -> {
+                    addPost()
+
+                    true
+
+                }
+                else -> false
+            }
+        }
+
 
         //just for commit
-
 
         val docRef = db.collection("items")
         docRef.addSnapshotListener{ snapshot, e ->
@@ -67,4 +84,9 @@ class FirstPage : AppCompatActivity() {
                 }
             }
     }
+    private fun addPost() {
+        val intent = Intent(this, PostItem::class.java)
+        startActivity(intent)
+    }
+
 }

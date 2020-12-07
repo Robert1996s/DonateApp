@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
-class MainActivity : AppCompatActivity() {
+class LogInScreen : AppCompatActivity() {
 
     lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
@@ -64,4 +64,5 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, UserSignUp::class.java)
         startActivity(intent)
     }
+
 }
