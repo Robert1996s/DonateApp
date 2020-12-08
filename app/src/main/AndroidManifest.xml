@@ -9,10 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FirstPage"></activity>
+        <activity android:name=".ProfileScreen"></activity>
+        <activity android:name=".FirstPage" />
         <activity android:name=".RecyclerviewAdapter" />
         <activity android:name=".UserSignUp" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".LogInScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

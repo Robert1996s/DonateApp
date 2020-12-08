@@ -32,10 +32,6 @@ class FirstPage : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-        val textTitle = findViewById<TextView>(R.id.title_text)
-        val textDescription = findViewById<TextView>(R.id.description_text)
-        val homeIcon = findViewById<ImageView>(R.id.home_icon)
-
         //just for commit
 
 

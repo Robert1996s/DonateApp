@@ -1,5 +1,6 @@
 package com.example.donateapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -45,13 +46,14 @@ class UserSignUp : AppCompatActivity() {
                         //Sign in Successful
                         println("!!!User Created")
                         val user = auth.currentUser
-                        updateUI(user)
+                        userSignedUp()
                     }
                 }
             }
     }
 
-    private fun updateUI(user: FirebaseUser?) {
-
+    private fun userSignedUp() {
+        val intent = Intent(this, FirstPage::class.java)
+        startActivity(intent)
     }
 }
