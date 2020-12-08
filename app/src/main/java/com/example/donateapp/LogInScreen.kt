@@ -64,5 +64,4 @@ class LogInScreen : AppCompatActivity() {
         val intent = Intent(this, UserSignUp::class.java)
         startActivity(intent)
     }
-
 }
