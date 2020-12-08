@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ProfileScreen"></activity>
+        <activity android:name=".PostItem"></activity>
         <activity android:name=".FirstPage" />
         <activity android:name=".RecyclerviewAdapter" />
         <activity android:name=".UserSignUp" />
