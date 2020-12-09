@@ -50,23 +50,21 @@ class FirstPage : AppCompatActivity() {
 
         val bottomNavigation : BottomNavigationView = findViewById(R.id.bottom_navigation)
 
-
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.addButton -> {
                     addPost()
+
                     false
                 }
                 R.id.profileButton -> {
                     toProfile()
+
                     false
                 }
                 else -> true
             }
         }
-
-
-        //just for commit
 
         val docRef = db.collection("items")
         docRef.addSnapshotListener{ snapshot, e ->
