@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.FirebaseApp
@@ -28,9 +29,13 @@ class LogInScreen : AppCompatActivity() {
         var shoppingItems = mutableListOf<Items>()
         val loginButton = findViewById<Button>(R.id.login_button)
         val signUpButton = findViewById<Button>(R.id.button_signup)
+        val emailInput = findViewById<EditText>(R.id.userEmail_input)
+        val passwordInput = findViewById<EditText>(R.id.password_input)
 
         loginButton.setOnClickListener {
-            toFirstPage()
+            val emailInput = emailInput.text.toString()
+            val passwordInput = passwordInput.text.toString()
+            checkLoggedIn (emailInput, passwordInput)
         }
 
         signUpButton.setOnClickListener {
@@ -64,5 +69,18 @@ class LogInScreen : AppCompatActivity() {
         val intent = Intent(this, UserSignUp::class.java)
         startActivity(intent)
     }
-
+    private fun checkLoggedIn (emailInput: String, passwordInput: String) {
+        if (emailInput == "" || passwordInput == "") {
+            println("!!!Wrong Input")
+        }
+        else {
+            auth.signInWithEmailAndPassword(emailInput, passwordInput)
+                .addOnCompleteListener(this) {task ->
+                    if (task.isSuccessful) {
+                        println("!!!Logged In")
+                        toFirstPage()
+                    }
+                }
+        }
+    }
 }

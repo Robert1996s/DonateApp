@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Adapter
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -21,6 +23,7 @@ class FirstPage : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
     private var itemList = mutableListOf<Items>()
     private var itemUid = ""
+    private var uid = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,10 +32,17 @@ class FirstPage : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
+
         val adapter = ItemAdapter(this, itemList)
         val recyclerView = findViewById<RecyclerView>(R.id.test_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+
+        val currentUser: FirebaseUser? = auth.currentUser
+
+        if (currentUser != null){
+            uid = auth.currentUser!!.uid
+        }
 
         //val bottomHome = findViewById<TextView>(R.id.title_text)
         //val textDescription = findViewById<TextView>(R.id.addButton)
@@ -48,16 +58,13 @@ class FirstPage : AppCompatActivity() {
                     false
                 }
                 R.id.profileButton -> {
-                    //toProfile()
+                    toProfile()
 
                     false
                 }
                 else -> true
             }
         }
-
-
-        //just for commit
 
         val docRef = db.collection("items")
         docRef.addSnapshotListener{ snapshot, e ->
@@ -92,4 +99,8 @@ class FirstPage : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun toProfile() {
+        val intent = Intent(this, ProfileScreen::class.java)
+        startActivity(intent)
+    }
 }

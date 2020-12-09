@@ -30,6 +30,7 @@ class PostItem : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_item)
 
+
         val itemTitle = findViewById<TextView>(R.id.editTextDonate)
         val itemAdress = findViewById<TextView>(R.id.editTextLocation)
         val itemDescription = findViewById<TextView>(R.id.editTextFullDescription)
