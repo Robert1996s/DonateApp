@@ -40,16 +40,19 @@ class FirstPage : AppCompatActivity() {
 
         val bottomNavigation : BottomNavigationView = findViewById(R.id.bottom_navigation)
 
-
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.addButton -> {
                     addPost()
 
-                    true
-
+                    false
                 }
-                else -> false
+                R.id.profileButton -> {
+                    //toProfile()
+
+                    false
+                }
+                else -> true
             }
         }
 
