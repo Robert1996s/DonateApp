@@ -1,15 +1,15 @@
 package com.example.donateapp
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,10 +19,10 @@ import kotlinx.android.synthetic.main.activity_post_item.*
 class PostItem : AppCompatActivity() {
 
     lateinit var db : FirebaseFirestore
-
+    private var imageUri : Uri?  = null
 
     companion object {
-        private val IMAGE_CHOOSE = 1000
+        private val IMAGE_PICK_CODE  = 1000
         private val PERMISSION_CODE = 1001
     }
 
@@ -41,12 +41,14 @@ class PostItem : AppCompatActivity() {
         val addPicture = findViewById<Button>(R.id.addPicture)
         val addDonateItem = findViewById<Button>(R.id.add_donate)
 
-        addDonateItem.setOnClickListener { view ->
+        addDonateItem.setOnClickListener {
 
             addDonatePost()
         }
 
-        addPicture.setOnClickListener { view ->
+
+        addPicture.setOnClickListener {
+
             addPicture()
         }
 
@@ -85,21 +87,35 @@ class PostItem : AppCompatActivity() {
     private fun chooseImageGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
-        startActivityForResult(intent, IMAGE_CHOOSE)
+        startActivityForResult(intent, IMAGE_PICK_CODE)
+
+
     }
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        when(requestCode){
-            PERMISSION_CODE -> {
+        if(requestCode == PERMISSION_CODE )  {
+
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     chooseImageGallery()
                 }else{
                     Toast.makeText(this,"Permission denied", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+
+
+     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+         val itemImage = findViewById<ImageView>(R.id.imageView2)
+
+        if(requestCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+
+            itemImage.setImageURI(data?.data)
+
         }
     }
 }
