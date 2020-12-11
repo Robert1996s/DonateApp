@@ -46,10 +46,10 @@ class PostItem : AppCompatActivity() {
             addDonatePost()
         }
 
+
         addPicture.setOnClickListener {
 
             addPicture()
-
         }
 
     }
@@ -77,10 +77,10 @@ class PostItem : AppCompatActivity() {
                 val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                 requestPermissions(permissions, PERMISSION_CODE)
             } else{
-                chooseImageGallery();
+                chooseImageGallery()
             }
         }else{
-            chooseImageGallery();
+            chooseImageGallery()
         }
     }
 
