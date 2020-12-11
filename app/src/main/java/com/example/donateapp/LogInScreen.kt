@@ -47,7 +47,6 @@ class LogInScreen : AppCompatActivity() {
 
         if (currentUser != null) {
             //User is logged in
-            println("!!!Logged IN")
             val intent = Intent(this, FirstPage::class.java)
             startActivity(intent)
         }
