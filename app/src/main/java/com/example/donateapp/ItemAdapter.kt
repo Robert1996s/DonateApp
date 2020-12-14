@@ -1,12 +1,19 @@
 package com.example.donateapp
 
+import android.content.ClipData
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.view.menu.MenuView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.activity_post_item.view.*
+import kotlinx.android.synthetic.main.row_card.view.*
 
 class ItemAdapter (
     private val context: Context,
@@ -26,24 +33,24 @@ class ItemAdapter (
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         val item = items[position]
-        val itemTitle = item.title
-        val itemDesc = item.description
-        val itemImage = item.item_image_url
-        holder.titleText.text = itemTitle
-        holder.descriptionText.text = itemDesc
 
-
-        Glide.with(holder.itemView.context).load(uri).into(holder.itemImage1)
-
-
-
-    }
+            val itemTitle = item.title
+            val itemDesc = item.description
+            val itemImage = item.item_image_url
+            holder.titleText.text = itemTitle
+            holder.descriptionText.text = itemDesc
+            //holder.itemImage.setImageResource(itemImage?[position].toInt())
+            //Glide.with(holder.itemView).load(item).into(holder.itemView.item_image)
+        }
 
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        val titleText = itemView.findViewById<TextView>(R.id.title_text)
+        val titleText: TextView = itemView.findViewById(R.id.title_text)
         val descriptionText = itemView.findViewById<TextView>(R.id.description_text)
-        val itemImage1 = itemView.findViewById<ImageView>(R.id.item_image)
+        val itemImage = itemView.findViewById<ImageView>(R.id.item_image)
+
     }
 
 }
+

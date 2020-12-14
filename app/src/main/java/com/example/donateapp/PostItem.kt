@@ -9,11 +9,15 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.*
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.example.donateapp.PostItem.Companion.IMAGE_PICK_CODE
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_post_item.*
 
 class PostItem : AppCompatActivity() {
@@ -89,13 +93,19 @@ class PostItem : AppCompatActivity() {
         intent.type = "image/*"
         startActivityForResult(intent, IMAGE_PICK_CODE)
 
-
     }
+
+    /*
+    private fun sendItem() {
+        val intent = Intent(this, FirstPage::class.java)
+        intent.putExtra("imageView2", R.drawable.ic_baseline_add_picture)
+        startActivity(intent)
+    }*/
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+        grantResults: IntArray) {
         if(requestCode == PERMISSION_CODE )  {
 
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
@@ -106,17 +116,19 @@ class PostItem : AppCompatActivity() {
             }
         }
 
-
      override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-         val itemImage = findViewById<ImageView>(R.id.imageView2)
+        if(requestCode == IMAGE_PICK_CODE && resultCode == Activity.RESULT_OK) {
 
-        if(requestCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+            imageView2.setImageURI(data?.data)
+            println("!!!${data?.data}")
 
-            itemImage.setImageURI(data?.data)
+            // Nu ska informationen skickas vidare till recyclerview:n ( klassen FirstPage)
 
         }
+
     }
+
 }
 
