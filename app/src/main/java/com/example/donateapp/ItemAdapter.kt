@@ -41,14 +41,16 @@ class ItemAdapter (
             val itemImage = item.item_image_url
             holder.titleText.text = itemTitle
             holder.descriptionText.text = itemDesc
-            //holder.itemImage.setImageResource(itemImage?[position].toInt())
-            //Glide.with(holder.itemView).load(item).into(holder.itemView.item_image)
+            //holder.itemImage.setImageResource(item.item_image_url?)
+            //Glide.with(holder.itemView.).load(item).into(holder.itemView.item_image
+
+            //holder.itemImage.setImageResource(item.item_image_url))
         }
 
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        val titleText: TextView = itemView.findViewById(R.id.title_text)
-        val descriptionText = itemView.findViewById<TextView>(R.id.description_text)
-        val itemImage = itemView.findViewById<ImageView>(R.id.item_image)
+        val titleText : TextView = itemView.findViewById(R.id.title_text)
+        val descriptionText : TextView = itemView.findViewById(R.id.description_text)
+        val itemImage : ImageView = itemView.findViewById(R.id.item_image)
 
     }
 

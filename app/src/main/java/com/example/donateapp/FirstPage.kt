@@ -108,7 +108,7 @@ class FirstPage : AppCompatActivity() {
     private fun updateImage(){
         if (imageUrl != "") {
             val itemImage = findViewById<ImageView>(R.id.item_image)
-            Glide.with(this)
+            Glide.with(this@FirstPage)
                 .load(imageUrl)//.apply(RequestOptions.centerCropTransform())
                 .into(itemImage)
         }

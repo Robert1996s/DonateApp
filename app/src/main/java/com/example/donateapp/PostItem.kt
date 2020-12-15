@@ -4,20 +4,13 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.*
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.example.donateapp.PostItem.Companion.IMAGE_PICK_CODE
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_post_item.*
 
 class PostItem : AppCompatActivity() {
@@ -38,7 +31,6 @@ class PostItem : AppCompatActivity() {
         val itemTitle = findViewById<TextView>(R.id.editTextDonate)
         val itemAdress = findViewById<TextView>(R.id.editTextLocation)
         val itemDescription = findViewById<TextView>(R.id.editTextFullDescription)
-
 
         db = FirebaseFirestore.getInstance()
 
