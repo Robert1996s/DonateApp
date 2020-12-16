@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +14,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_post_item.*
 
 class PostItem : AppCompatActivity() {
@@ -39,7 +37,6 @@ class PostItem : AppCompatActivity() {
         val itemTitle = findViewById<TextView>(R.id.editTextDonate)
         val itemAdress = findViewById<TextView>(R.id.editTextLocation)
         val itemDescription = findViewById<TextView>(R.id.editTextFullDescription)
-
 
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
@@ -101,13 +98,19 @@ class PostItem : AppCompatActivity() {
         intent.type = "image/*"
         startActivityForResult(intent, IMAGE_PICK_CODE)
 
-
     }
+
+    /*
+    private fun sendItem() {
+        val intent = Intent(this, FirstPage::class.java)
+        intent.putExtra("imageView2", R.drawable.ic_baseline_add_picture)
+        startActivity(intent)
+    }*/
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+        grantResults: IntArray) {
         if(requestCode == PERMISSION_CODE )  {
 
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
@@ -118,13 +121,9 @@ class PostItem : AppCompatActivity() {
             }
         }
 
-
      override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-         val itemImage = findViewById<ImageView>(R.id.imageView2)
-
-        if(resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+        if(requestCode == IMAGE_PICK_CODE && resultCode == Activity.RESULT_OK) {
             itemImage.setImageURI(data?.data)
             imageUri = data?.data
             println("!!!${imageUri}")
@@ -133,8 +132,14 @@ class PostItem : AppCompatActivity() {
     }
 
     private fun uploadImage() {
-        //val docRef =
+            //val docRef =
             //.update("item_image_url")
+            imageView2.setImageURI(data?.data)
+            println("!!!${data?.data}")
+
+            // Nu ska informationen skickas vidare till recyclerview:n ( klassen FirstPage)
+
+        }
     }
 }
 

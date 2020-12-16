@@ -18,8 +18,10 @@ class ProfileScreen : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     lateinit var db: FirebaseFirestore
+    private var myItemList = mutableListOf<Items>()
     private var uid = ""
     private var myItemList = mutableListOf<Items>()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +56,22 @@ class ProfileScreen : AppCompatActivity() {
             getProfileInfo()
 
         }
+
+        val docRef = db.collection("users").document(uid).collection("userItems")
+        docRef.addSnapshotListener{ snapshot, e ->
+            if( snapshot != null ) {
+                for (document in snapshot.documents) {
+                    val item = document.toObject(Items::class.java)
+                    if(item != null)
+                        myItemList.add(item)
+                    //imageUrl = temp!!.item_image_url.toString()
+                    println("!!! ${item?.title}")
+                    println("!!! ${item?.description}")
+
+                }
+            }
+        }
+
 
     } // ON CREATE
 
