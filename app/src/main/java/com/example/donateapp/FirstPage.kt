@@ -12,12 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+//import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-
+import kotlinx.android.synthetic.main.row_card.*
 
 
 class FirstPage : AppCompatActivity() {
@@ -38,6 +39,7 @@ class FirstPage : AppCompatActivity() {
 
 
         val itemImage = findViewById<ImageView>(R.id.item_image)
+
         val adapter = ItemAdapter(this, itemList)
         val recyclerView = findViewById<RecyclerView>(R.id.test_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -107,11 +109,10 @@ class FirstPage : AppCompatActivity() {
         if (imageUrl != "") {
             val itemImage = findViewById<ImageView>(R.id.item_image)
             Glide.with(this@FirstPage)
-                .load(imageUrl).apply(RequestOptions.centerCropTransform())
+                .load(imageUrl)//.apply(RequestOptions.centerCropTransform())
                 .into(itemImage)
         }
     }
-
 
     private fun addPost() {
         val intent = Intent(this, PostItem::class.java)
