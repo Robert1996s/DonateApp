@@ -13,6 +13,7 @@ import androidx.appcompat.view.menu.MenuView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import java.net.URL
 import kotlinx.android.synthetic.main.activity_post_item.view.*
 import kotlinx.android.synthetic.main.row_card.view.*
 import java.lang.reflect.Array.get
@@ -29,8 +30,12 @@ class ItemAdapter (
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = layoutInflater.inflate(R.layout.row_card, parent, false)
         return ViewHolder(itemView)
+        /*return ImageViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.row_card,
+                parent,
+                false)) */
     }
-
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -42,7 +47,6 @@ class ItemAdapter (
         val itemImage = item.item_image_url
         holder.titleText.text = itemTitle
         holder.descriptionText.text = itemDesc
-        //holder.itemPosition = position
 
         holder.itemView.setOnClickListener {
 
@@ -59,10 +63,6 @@ class ItemAdapter (
             context.startActivity(intent)
         }
     }
-
-    //holder.itemImage.setImageResource(item.item_image_url?)
-    //Glide.with(holder.itemView.).load(item).into(holder.itemView.item_image
-    //holder.itemImage.setImageResource(item.item_image_url))
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleText: TextView = itemView.findViewById(R.id.title_text)
