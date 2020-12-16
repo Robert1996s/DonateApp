@@ -96,7 +96,7 @@ class FirstPage : AppCompatActivity() {
                 for (document in documentSnapshot.documents) {
                     val newItem = document!!.toObject(Items::class.java)
                     if (newItem != null) {
-                        println("!!!${newItem?.title}")
+                        //println("!!!${newItem?.title}")
                     }
                 }
             }

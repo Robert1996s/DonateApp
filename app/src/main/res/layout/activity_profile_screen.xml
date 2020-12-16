@@ -27,16 +27,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/userprofile_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username_display"
-        tools:srcCompat="@tools:sample/avatars" />
-
     <TextView
         android:id="@+id/user_email_display"
         android:layout_width="wrap_content"
@@ -46,7 +36,15 @@
         android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userprofile_image" />
+        app:layout_constraintTop_toBottomOf="@+id/username_display" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/my_items_list"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/signout_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
