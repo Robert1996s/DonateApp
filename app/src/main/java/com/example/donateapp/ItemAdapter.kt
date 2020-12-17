@@ -48,7 +48,7 @@ class ItemAdapter (
         holder.titleText.text = itemTitle
         holder.descriptionText.text = itemDesc
 
-        holder.itemImage.setImageU
+        //holder.itemImage.setImageU
 
         //holder.itemImage.setImageResource(item.item_image_url!!.toInt())
 
