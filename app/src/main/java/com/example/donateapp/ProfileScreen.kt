@@ -20,6 +20,9 @@ class ProfileScreen : AppCompatActivity() {
     lateinit var db: FirebaseFirestore
     private var myItemList = mutableListOf<Items>()
     private var uid = ""
+  
+    var imageLink = ""
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +44,10 @@ class ProfileScreen : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
+        myItemList.add(Items("Bil", "En blå bil"))
+        myItemList.add(Items("Bil", "En blå bil"))
+        myItemList.add(Items("Bil", "En blå bil"))
+
 
 
         signOutBtn.setOnClickListener {
@@ -61,11 +68,10 @@ class ProfileScreen : AppCompatActivity() {
                 for (document in snapshot.documents) {
                     val item = document.toObject(Items::class.java)
                     if(item != null)
-                        myItemList.add(item)
                     //imageUrl = temp!!.item_image_url.toString()
                     println("!!! ${item?.title}")
                     println("!!! ${item?.description}")
-
+                    println("!!! ${item?.item_image_url}")
                 }
             }
         }

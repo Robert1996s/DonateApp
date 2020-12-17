@@ -48,13 +48,11 @@ class ItemAdapter (
         holder.titleText.text = itemTitle
         holder.descriptionText.text = itemDesc
 
+        //holder.itemImage.setImageResource(item.item_image_url!!.toInt())
+
         holder.itemView.setOnClickListener {
-
-            //val model = items[position]
-
             val title : String? = itemTitle
             val description : String? = itemDesc
-            val image : String? = itemImage
 
             val intent = Intent(context, DetalInformation::class.java)
 
@@ -69,8 +67,8 @@ class ItemAdapter (
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleText: TextView = itemView.findViewById(R.id.title_text)
         val descriptionText: TextView = itemView.findViewById(R.id.description_text)
-        val itemImage: ImageView = itemView.findViewById(R.id.item_image)
-        //var itemPosition = 0
+        var itemImage: ImageView = itemView.findViewById(R.id.item_image)
+
 
     }
 }
