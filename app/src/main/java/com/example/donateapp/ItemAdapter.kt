@@ -48,10 +48,7 @@ class ItemAdapter (
         holder.titleText.text = itemTitle
         holder.descriptionText.text = itemDesc
 
-        //holder.itemImage.setImageU
-
         //holder.itemImage.setImageResource(item.item_image_url!!.toInt())
-
 
         holder.itemView.setOnClickListener {
             val title : String? = itemTitle
@@ -61,6 +58,7 @@ class ItemAdapter (
 
             intent.putExtra("titleText", title)
             intent.putExtra("descriptionText", description)
+            intent.putExtra("displayedImage", image)
 
             context.startActivity(intent)
         }

@@ -10,14 +10,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isEmpty
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_detal_information.view.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_post_item.*
 import kotlinx.android.synthetic.main.row_card.*
+
 
 class PostItem : AppCompatActivity() {
 
@@ -80,10 +83,6 @@ class PostItem : AppCompatActivity() {
             db.collection("users").document(uid).collection("userItems").add(item)
         }
 
-
-
-
-
         // För att användaren inte ska vara kvar på sidan efter ha lagt till på knappen ska vyn försvinna. Kan skapa ett intent som skickar tillbaka till
         // den sida man ska komma till och gör en finish()
 
@@ -139,6 +138,7 @@ class PostItem : AppCompatActivity() {
 
     //Laddar upp den valda bilder till firebase Storage, visar en toast som berättar för användaren om bilden laddades upp
     private fun uploadImage() {
+
             if (imageUri != null){
                 val docRef = storageReference?.child("ItemsUpload/itemImage" + uid)
                 docRef?.putFile(imageUri!!)
@@ -160,6 +160,6 @@ class PostItem : AppCompatActivity() {
         val intent = Intent(this, FirstPage::class.java)
         startActivity(intent)
     }
-}
+
 
 

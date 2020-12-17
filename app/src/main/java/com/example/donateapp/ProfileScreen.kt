@@ -20,6 +20,7 @@ class ProfileScreen : AppCompatActivity() {
     lateinit var db: FirebaseFirestore
     private var myItemList = mutableListOf<Items>()
     private var uid = ""
+  
     var imageLink = ""
 
 
