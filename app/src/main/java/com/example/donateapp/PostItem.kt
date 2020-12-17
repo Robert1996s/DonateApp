@@ -10,17 +10,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isEmpty
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_detal_information.view.*
 import kotlinx.android.synthetic.main.activity_post_item.*
+import kotlinx.android.synthetic.main.my_item_card.*
 
 class PostItem : AppCompatActivity() {
 
     lateinit var db : FirebaseFirestore
     lateinit var auth: FirebaseAuth
-    private var imageUri : Uri?  = null
+    private var imageUri : Uri? = null
     private var itemUid = ""
     private var uid = ""
 
@@ -67,11 +70,12 @@ class PostItem : AppCompatActivity() {
         val itemTitle = editTextDonate.text.toString()
         val itemAdress = editTextLocation.text.toString()
         val itemDescription = editTextFullDescription.text.toString()
+        val imageData = imageUri.toString()
 
         if(itemTitle.isEmpty() || itemAdress.isEmpty() || itemDescription.isEmpty())
             return
 
-        val item =  Items(itemTitle,itemDescription,itemAdress)
+        val item =  Items(itemTitle,itemDescription,itemAdress, imageData)
         val ref = db.collection("items").add(item)
         val myref = db.collection("users").document(uid).collection("userItems").add(item)
 
@@ -124,22 +128,22 @@ class PostItem : AppCompatActivity() {
      override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == IMAGE_PICK_CODE && resultCode == Activity.RESULT_OK) {
-            itemImage.setImageURI(data?.data)
+            imageView2.setImageURI(data?.data)
             imageUri = data?.data
             println("!!!${imageUri}")
         }
-         uploadImage()
+         //uploadImage()
     }
 
     private fun uploadImage() {
             //val docRef =
             //.update("item_image_url")
-            imageView2.setImageURI(data?.data)
-            println("!!!${data?.data}")
+            //imageView2.setImageURI(data?.data)
+            //println("!!!${data?.data}")
 
             // Nu ska informationen skickas vidare till recyclerview:n ( klassen FirstPage)
 
         }
     }
-}
+
 

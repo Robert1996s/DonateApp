@@ -50,15 +50,17 @@ class ItemAdapter (
 
         holder.itemView.setOnClickListener {
 
-            val model = items[position]
+            //val model = items[position]
 
-            val title : String? = model.title
-            val description : String? = model.description
+            val title : String? = itemTitle
+            val description : String? = itemDesc
+            val image : String? = itemImage
 
             val intent = Intent(context, DetalInformation::class.java)
 
             intent.putExtra("titleText", title)
             intent.putExtra("descriptionText", description)
+            intent.putExtra("displayedImage", image)
 
             context.startActivity(intent)
         }

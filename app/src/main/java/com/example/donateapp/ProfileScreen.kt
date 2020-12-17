@@ -20,8 +20,6 @@ class ProfileScreen : AppCompatActivity() {
     lateinit var db: FirebaseFirestore
     private var myItemList = mutableListOf<Items>()
     private var uid = ""
-    private var myItemList = mutableListOf<Items>()
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
