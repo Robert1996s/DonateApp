@@ -14,15 +14,19 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_post_item.*
+import kotlinx.android.synthetic.main.row_card.*
 
 class PostItem : AppCompatActivity() {
 
     lateinit var db : FirebaseFirestore
     lateinit var auth: FirebaseAuth
     private var imageUri : Uri?  = null
-    private var itemUid = ""
     private var uid = ""
+    private var firebaseStorage: FirebaseStorage? = null
+    private var storageReference: StorageReference? = null
 
     companion object {
         private val IMAGE_PICK_CODE  = 1000
@@ -34,12 +38,10 @@ class PostItem : AppCompatActivity() {
         setContentView(R.layout.activity_post_item)
 
 
-        val itemTitle = findViewById<TextView>(R.id.editTextDonate)
-        val itemAdress = findViewById<TextView>(R.id.editTextLocation)
-        val itemDescription = findViewById<TextView>(R.id.editTextFullDescription)
-
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
+        firebaseStorage = FirebaseStorage.getInstance()
+        storageReference = FirebaseStorage.getInstance().reference
 
         val currentUser: FirebaseUser? = auth.currentUser
         if (currentUser != null) {
@@ -50,8 +52,8 @@ class PostItem : AppCompatActivity() {
         val addDonateItem = findViewById<Button>(R.id.add_donate)
 
         addDonateItem.setOnClickListener {
-
             addDonatePost()
+            uploadImage()
         }
 
 
@@ -63,49 +65,53 @@ class PostItem : AppCompatActivity() {
     }
 
     private fun addDonatePost(){
-
         val itemTitle = editTextDonate.text.toString()
         val itemAdress = editTextLocation.text.toString()
         val itemDescription = editTextFullDescription.text.toString()
+        val imageData = imageUri.toString()
 
-        if(itemTitle.isEmpty() || itemAdress.isEmpty() || itemDescription.isEmpty())
-            return
+        if(itemTitle.isEmpty() || itemAdress.isEmpty() || itemDescription.isEmpty()) {
+            Toast.makeText(applicationContext, "Wrong Input", Toast.LENGTH_SHORT).show()
 
-        val item =  Items(itemTitle,itemDescription,itemAdress)
-        val ref = db.collection("items").add(item)
-        val myref = db.collection("users").document(uid).collection("userItems").add(item)
+        }
+        else {
+            val item =  Items(itemTitle,itemDescription,itemAdress, imageData)
+            db.collection("items").add(item)
+            db.collection("users").document(uid).collection("userItems").add(item)
+        }
+
+
+
+
 
         // För att användaren inte ska vara kvar på sidan efter ha lagt till på knappen ska vyn försvinna. Kan skapa ett intent som skickar tillbaka till
         // den sida man ska komma till och gör en finish()
 
     }
     private fun addPicture() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_DENIED
+            ) {
                 val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                 requestPermissions(permissions, PERMISSION_CODE)
-            } else{
+            } else {
                 chooseImageGallery()
             }
-        }else{
+        } else {
             chooseImageGallery()
         }
     }
+
 
     private fun chooseImageGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         startActivityForResult(intent, IMAGE_PICK_CODE)
-
     }
 
-    /*
-    private fun sendItem() {
-        val intent = Intent(this, FirstPage::class.java)
-        intent.putExtra("imageView2", R.drawable.ic_baseline_add_picture)
-        startActivity(intent)
-    }*/
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -121,25 +127,39 @@ class PostItem : AppCompatActivity() {
             }
         }
 
+    //Sätter in bilden i ImageView och sätter datan till en global variabel
      override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == IMAGE_PICK_CODE && resultCode == Activity.RESULT_OK) {
-            itemImage.setImageURI(data?.data)
+            imageView2.setImageURI(data?.data)
             imageUri = data?.data
             println("!!!${imageUri}")
         }
-         uploadImage()
     }
 
+    //Laddar upp den valda bilder till firebase Storage, visar en toast som berättar för användaren om bilden laddades upp
     private fun uploadImage() {
-            //val docRef =
-            //.update("item_image_url")
-            imageView2.setImageURI(data?.data)
-            println("!!!${data?.data}")
+            if (imageUri != null){
+                val docRef = storageReference?.child("ItemsUpload/itemImage" + uid)
+                docRef?.putFile(imageUri!!)
+                    ?.addOnSuccessListener {
+                        Toast.makeText(applicationContext,
+                            "Image Uploaded",
+                            Toast.LENGTH_LONG).show()
+                            backToRecyclerView()
 
-            // Nu ska informationen skickas vidare till recyclerview:n ( klassen FirstPage)
+                    }?.addOnFailureListener{
+                        Toast.makeText(applicationContext,
+                            "Image NOT uploaded",
+                            Toast.LENGTH_LONG).show()
+                    }
+            }
+    }
 
-        }
+    private fun backToRecyclerView() {
+        val intent = Intent(this, FirstPage::class.java)
+        startActivity(intent)
     }
 }
+
 
