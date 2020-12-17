@@ -4,6 +4,6 @@ class Items(
     val title: String? = null,
     val description: String? = null,
     val adress: String? = null,
-    val item_image_url: String? = null
+    var item_image_url: String? = null
     ) {
 }

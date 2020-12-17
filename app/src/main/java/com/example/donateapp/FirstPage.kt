@@ -17,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.row_card.*
 
@@ -33,10 +34,8 @@ class FirstPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_page)
-
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
-
 
         val itemImage = findViewById<ImageView>(R.id.item_image)
 
@@ -47,7 +46,7 @@ class FirstPage : AppCompatActivity() {
 
         val currentUser: FirebaseUser? = auth.currentUser
 
-        if (currentUser != null){
+        if (currentUser != null) {
             uid = auth.currentUser!!.uid
         }
 
@@ -55,10 +54,10 @@ class FirstPage : AppCompatActivity() {
         //val textDescription = findViewById<TextView>(R.id.addButton)
         //val homeIcon = findViewById<ImageView>(R.id.home_icon)
 
-        val bottomNavigation : BottomNavigationView = findViewById(R.id.bottom_navigation)
+        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
-            when(item.itemId) {
+            when (item.itemId) {
                 R.id.addButton -> {
                     addPost()
 
@@ -74,22 +73,24 @@ class FirstPage : AppCompatActivity() {
         }
 
         val docRef = db.collection("items")
-        docRef.addSnapshotListener{ snapshot, e ->
-            if( snapshot != null ) {
+        docRef.addSnapshotListener { snapshot, e ->
+            if (snapshot != null) {
                 itemList.clear()
                 for (document in snapshot.documents) {
-                    val temp = document.toObject(Items::class.java)
-                    if(temp != null)
-                        itemList.add(temp)
-                    imageUrl = temp!!.item_image_url.toString()
-                    println("!!! ${temp.item_image_url}")
+                    val item = document.toObject(Items::class.java)
+                    if (item != null) {
+                        itemList.add(item)
+                        println("!!! ${item.item_image_url}")
+                        imageUrl = item!!.item_image_url.toString()
+                    }
+                    adapter.notifyDataSetChanged()
                 }
-                adapter.notifyDataSetChanged()
             }
+            println("!!!Logged In As: ${auth.currentUser?.email}")
+            getData()
         }
-        println("!!!Logged In As: ${auth.currentUser?.email}")
-        getData()
-    }
+        updateImage(imageUrl)
+    } // ON CREATE
 
     private fun getData () {
         val itemRef = db.collection("items")
@@ -98,18 +99,17 @@ class FirstPage : AppCompatActivity() {
                 for (document in documentSnapshot.documents) {
                     val newItem = document!!.toObject(Items::class.java)
                     if (newItem != null) {
-                        //println("!!!${newItem?.title}")
+                        val bild = newItem.item_image_url
                     }
                 }
             }
-        updateImage()
     }
 
-    private fun updateImage(){
-        if (imageUrl != "") {
+    private fun updateImage(iurl: String){
+        if (iurl != "") {
             val itemImage = findViewById<ImageView>(R.id.item_image)
             Glide.with(this@FirstPage)
-                .load(imageUrl)//.apply(RequestOptions.centerCropTransform())
+                .load(iurl)
                 .into(itemImage)
         }
     }
