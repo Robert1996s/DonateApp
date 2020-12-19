@@ -3,21 +3,14 @@ package com.example.donateapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.Adapter
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 //import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.row_card.*
 
@@ -123,4 +116,31 @@ class FirstPage : AppCompatActivity() {
         val intent = Intent(this, ProfileScreen::class.java)
         startActivity(intent)
     }
+
+    /*private fun mergeSort(itemList: List<Int>): List<Int> {
+        if (itemList.size <= 1) {
+            return itemList
+        }
+        val middle = itemList.size / 2
+        var left = itemList.subList(0, middle)
+        var right = itemList.subList(middle,itemList.size)
+
+        //return merge(mergeSort(left), mergeSort(right))
+        return merge(mergeSort(left), mergeSort(right))
+    }
+
+    private fun merge(left: List<Int>, right: List<Int>) {
+        var indexLeft = 0
+        var indexRight = 0
+        var newList : MutableList<Int> = mutableListOf()
+
+        while (indexLeft < left.count() && indexRight < right.count()) {
+            if (left[indexLeft] <= right[indexRight]) {
+                newList.add(left[indexLeft])
+                indexLeft++
+            } else {
+                newList.add(right[indexRight])
+            }
+        }
+    } */
 }

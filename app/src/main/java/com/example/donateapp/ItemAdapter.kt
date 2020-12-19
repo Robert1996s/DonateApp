@@ -58,7 +58,7 @@ class ItemAdapter (
 
             intent.putExtra("titleText", title)
             intent.putExtra("descriptionText", description)
-            intent.putExtra("displayedImage", image)
+            //intent.putExtra("displayedImage", image)
 
             context.startActivity(intent)
         }

@@ -1,2 +1,3 @@
+include ':myImages'
 include ':app'
 rootProject.name = "DonateApp"
