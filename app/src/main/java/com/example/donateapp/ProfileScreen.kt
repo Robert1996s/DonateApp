@@ -1,9 +1,12 @@
 package com.example.donateapp
 
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.LruCache
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +16,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.my_item_card.*
 
 class ProfileScreen : AppCompatActivity() {
 
@@ -20,6 +24,7 @@ class ProfileScreen : AppCompatActivity() {
     lateinit var db: FirebaseFirestore
     private var myItemList = mutableListOf<Items>()
     private var uid = ""
+
   
     var imageLink = ""
 
@@ -39,14 +44,16 @@ class ProfileScreen : AppCompatActivity() {
         val signOutBtn = findViewById<Button>(R.id.signout_button)
 
 
+
         val adapter = ProfileListAdapter(this, myItemList)
         val recyclerView = findViewById<RecyclerView>(R.id.my_items_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
         myItemList.add(Items("Bil", "En blå bil"))
-        myItemList.add(Items("Bil", "En blå bil"))
-        myItemList.add(Items("Bil", "En blå bil"))
+        myItemList.add(Items("Cykel", "Oanvänd cykel"))
+        myItemList.add(Items("Tekokare", "Nästan helt ny"))
+
 
 
 
@@ -75,6 +82,30 @@ class ProfileScreen : AppCompatActivity() {
                 }
             }
         }
+
+
+
+        fun bubbleSort (list:IntArray):IntArray {
+            var swap = true
+            while (swap) {
+                swap = false
+                for (i in 0 until list.size-1) {
+                    if (list[i] > list[i + 1]) {
+                        val temp = list[i]
+                        list[i] = list[i + 1]
+                        list[i + 1] = temp
+                        swap = true
+                    }
+                }
+            }
+            return list
+        }
+        val list = bubbleSort(intArrayOf(2,15,1,8,4,88,55,25))
+        for (k in list) println("!!!${k} ")
+
+
+
+
 
 
     } // ON CREATE
@@ -128,6 +159,26 @@ class ProfileScreen : AppCompatActivity() {
         }
     } */
 
+    /*private fun bubbleSort (list:IntArray):IntArray {
+        var swap = true
+        while (swap) {
+            swap = false
+            for (i in 0 until list.size-1) {
+                if (list[i] > list[i + 1]) {
+                    val temp = list[i]
+                    list[i] = list[i + 1]
+                    list[i + 1] = temp
+                    swap = true
+                }
+            }
+        }
+        return list
+    }
+
+    private fun main(args: Array<String>) {
+        val list = bubbleSort(intArrayOf(2,15,1,8,4))
+        for (k in list) print("!!!$k ")
+    } */
 
 
     private fun logOut() {
