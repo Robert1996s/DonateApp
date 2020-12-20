@@ -1,18 +1,24 @@
 package com.example.donateapp
 
+//import com.bumptech.glide.request.RequestOptions
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-//import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.row_card.*
 
 
 class FirstPage : AppCompatActivity() {
@@ -24,9 +30,16 @@ class FirstPage : AppCompatActivity() {
     private var uid = ""
     private var imageUrl = ""
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+       var hasInternetType =  isOnline(this)
+
+        println("Internet  status = "+hasInternetType)
+
         setContentView(R.layout.activity_first_page)
+
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
@@ -95,6 +108,8 @@ class FirstPage : AppCompatActivity() {
                         val bild = newItem.item_image_url
                     }
                 }
+                //ConnectivityUtils.isConnected(this)
+                //print("!!!!!!${ConnectivityUtils}")
             }
     }
 
@@ -115,6 +130,36 @@ class FirstPage : AppCompatActivity() {
     private fun toProfile() {
         val intent = Intent(this, ProfileScreen::class.java)
         startActivity(intent)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun isOnline(context: Context): String {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.d("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    var networkvalue = "cellular"
+
+                    return networkvalue
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    var networkvalue = "Wifi"
+
+                    return networkvalue
+                }
+                else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    var networkvalue = "ethernet"
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+
+                    return networkvalue
+                }
+            }}
+
+        return "none"
+
+
     }
 
     /*private fun mergeSort(itemList: List<Int>): List<Int> {
@@ -143,4 +188,5 @@ class FirstPage : AppCompatActivity() {
             }
         }
     } */
+
 }

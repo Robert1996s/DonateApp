@@ -1,22 +1,16 @@
 package com.example.donateapp
 
 import android.content.Intent
-import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.LruCache
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.my_item_card.*
+
 
 class ProfileScreen : AppCompatActivity() {
 
@@ -74,44 +68,76 @@ class ProfileScreen : AppCompatActivity() {
             if( snapshot != null ) {
                 for (document in snapshot.documents) {
                     val item = document.toObject(Items::class.java)
-                    if(item != null)
+
+                    if(item != null){
+
                     //imageUrl = temp!!.item_image_url.toString()
-                    println("!!! ${item?.title}")
-                    println("!!! ${item?.description}")
-                    println("!!! ${item?.item_image_url}")
+                 //   println("!!! ${item?.title}")
+                   // println("!!! ${item?.description}")
+                    //println("!!! ${item?.item_image_url}")
                 }
+
+                }
+
             }
         }
 
 
 
-        fun bubbleSort (list:IntArray):IntArray {
-            var swap = true
-            while (swap) {
-                swap = false
-                for (i in 0 until list.size-1) {
-                    if (list[i] > list[i + 1]) {
-                        val temp = list[i]
-                        list[i] = list[i + 1]
-                        list[i + 1] = temp
-                        swap = true
-                    }
-                }
-            }
-            return list
-        }
-        val list = bubbleSort(intArrayOf(2,15,1,8,4,88,55,25))
-        for (k in list) println("!!!${k} ")
+        var words = arrayOf("banan", "zebra", "annanas", "Bamse","Dolly", "Örjan")
 
+        println("!! påbörjar sortering")
 
-
-
-
+        var list = bubbleSortAlphabet(words)
+        
 
     } // ON CREATE
 
+    fun bubbleSortAlphabet(words: Array<String>): Array<String>  {
+        var swap = true
 
-    private fun getProfileInfo() {
+        var letters = arrayOf("a", "b", "c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","å","ä","ö")
+
+            while (swap){
+
+                swap = false
+                for(i in 0 until words.size -1){
+
+
+                val wordToCheck =  words[i]
+                val wordToCheckNext =  words[i+1]
+
+                val first = wordToCheck.substring(0,1)
+                val second = wordToCheckNext.substring(0,1)
+
+                val firstWord = letters.indexOf(first.toLowerCase())
+                val secondWord = letters.indexOf(second.toLowerCase())
+
+                    if (firstWord > secondWord) {
+
+                        val temp = words[i]
+                    words[i] = words[i + 1]
+                    words[i + 1] = temp
+
+                    swap = true
+
+
+                    }
+
+                }
+
+
+         }
+
+
+
+        return words
+
+    }
+
+
+
+private fun getProfileInfo() {
 
         val docRef = db.collection("users").document(uid)
         val userNameText = findViewById<TextView>(R.id.username_display)
