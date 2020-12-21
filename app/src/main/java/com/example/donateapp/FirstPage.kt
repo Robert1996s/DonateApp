@@ -29,6 +29,8 @@ class FirstPage : AppCompatActivity() {
     private var itemUid = ""
     private var uid = ""
     private var imageUrl = ""
+    private var internetConnection = false
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -141,17 +143,21 @@ class FirstPage : AppCompatActivity() {
                 if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                     Log.d("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
                     var networkvalue = "cellular"
-
+                    internetConnection = true
+                    checkInternet(internetConnection)
                     return networkvalue
                 } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                     Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    internetConnection = true
+                    checkInternet(internetConnection)
                     var networkvalue = "Wifi"
-
                     return networkvalue
                 }
                 else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
                     var networkvalue = "ethernet"
                     Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    internetConnection = true
+                    checkInternet(internetConnection)
 
                     return networkvalue
                 }
@@ -159,8 +165,20 @@ class FirstPage : AppCompatActivity() {
 
         return "none"
 
-
     }
+
+    private fun checkInternet(checkInternet : Boolean) {
+
+        if (checkInternet) {
+            println("!!! INTERNET ACCESS") // Internet
+        }
+        else {
+            println("!!! NO ACCESS") // Cache
+        }
+    }
+
+
+
 
     /*private fun mergeSort(itemList: List<Int>): List<Int> {
         if (itemList.size <= 1) {

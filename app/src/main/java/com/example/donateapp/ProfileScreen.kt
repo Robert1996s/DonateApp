@@ -84,19 +84,15 @@ class ProfileScreen : AppCompatActivity() {
 
 
 
-        var words = arrayOf("banan", "zebra", "annanas", "Bamse","Dolly", "Örjan")
+        var words = arrayListOf<String>("banan", "zebra", "annanas", "Bamse","Dolly", "Örjan")
 
         println("!! påbörjar sortering")
 
-        var list = bubbleSortAlphabet(words)
-        
 
-    } // ON CREATE
+        fun bubbleSortAlphabet(words: ArrayList<String>): ArrayList<String>  {
+            var swap = true
 
-    fun bubbleSortAlphabet(words: Array<String>): Array<String>  {
-        var swap = true
-
-        var letters = arrayOf("a", "b", "c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","å","ä","ö")
+            var letters = arrayOf("a", "b", "c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","å","ä","ö")
 
             while (swap){
 
@@ -104,37 +100,40 @@ class ProfileScreen : AppCompatActivity() {
                 for(i in 0 until words.size -1){
 
 
-                val wordToCheck =  words[i]
-                val wordToCheckNext =  words[i+1]
+                    val wordToCheck =  words[i]
+                    val wordToCheckNext =  words[i+1]
 
-                val first = wordToCheck.substring(0,1)
-                val second = wordToCheckNext.substring(0,1)
+                    val first = wordToCheck.substring(0,1)
+                    val second = wordToCheckNext.substring(0,1)
 
-                val firstWord = letters.indexOf(first.toLowerCase())
-                val secondWord = letters.indexOf(second.toLowerCase())
+                    val firstWord = letters.indexOf(first.toLowerCase())
+                    val secondWord = letters.indexOf(second.toLowerCase())
 
                     if (firstWord > secondWord) {
 
                         val temp = words[i]
-                    words[i] = words[i + 1]
-                    words[i + 1] = temp
+                        words[i] = words[i + 1]
+                        words[i + 1] = temp
 
-                    swap = true
+                        swap = true
+
 
 
                     }
-
                 }
+            }
+
+            return words
+        }
+
+        var list = bubbleSortAlphabet(words)
+
+        bubbleSortAlphabet(words)
+
+        println("!!${words}")
 
 
-         }
-
-
-
-        return words
-
-    }
-
+    } // ON CREATE
 
 
 private fun getProfileInfo() {
