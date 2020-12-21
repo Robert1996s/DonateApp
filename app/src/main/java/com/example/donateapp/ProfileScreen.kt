@@ -1,22 +1,15 @@
 package com.example.donateapp
 
 import android.content.Intent
-import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.LruCache
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.my_item_card.*
 
 class ProfileScreen : AppCompatActivity() {
 
@@ -24,8 +17,6 @@ class ProfileScreen : AppCompatActivity() {
     lateinit var db: FirebaseFirestore
     private var myItemList = mutableListOf<Items>()
     private var uid = ""
-
-  
     var imageLink = ""
 
 
@@ -56,17 +47,13 @@ class ProfileScreen : AppCompatActivity() {
 
 
 
-
         signOutBtn.setOnClickListener {
             logOut()
         }
 
-
-
         if (currentUser != null){
             uid = auth.currentUser!!.uid
             getProfileInfo()
-
         }
 
         val docRef = db.collection("users").document(uid).collection("userItems")
@@ -85,30 +72,45 @@ class ProfileScreen : AppCompatActivity() {
 
 
 
-        fun bubbleSort (list:IntArray):IntArray {
+        var words = arrayListOf<String>("banan", "zebra", "annanas", "Bamse","Dolly", "Örjan")
+
+
+        fun bubbleSortAlphabet(words: ArrayList<String>): ArrayList<String> {
+            println("!! påbörjar sortering")
             var swap = true
-            while (swap) {
+            var letters = arrayOf("a", "b", "c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","å","ä","ö")
+            var changes = 0
+            while (swap){
                 swap = false
-                for (i in 0 until list.size-1) {
-                    if (list[i] > list[i + 1]) {
-                        val temp = list[i]
-                        list[i] = list[i + 1]
-                        list[i + 1] = temp
+                for(i in 0 until words.size -1){
+                    changes ++
+                    val wordToCheck =  words[i]
+                    val wordToCheckNext =  words[i+1]
+                    val first = wordToCheck.substring(0,1)
+                    val second = wordToCheckNext.substring(0,1)
+                    val firstWord = letters.indexOf(first.toLowerCase())
+                    val secondWord = letters.indexOf(second.toLowerCase())
+                    if (firstWord > secondWord) {
+                        val temp = words[i]
+                        words[i] = words[i + 1]
+                        words[i + 1] = temp
                         swap = true
+
                     }
+                    print("!!!change:${changes}${words}")
                 }
             }
-            return list
+            return words
         }
-        val list = bubbleSort(intArrayOf(2,15,1,8,4,88,55,25))
-        for (k in list) println("!!!${k} ")
 
-
-
-
+        var list = bubbleSortAlphabet(words)
+        bubbleSortAlphabet(words)
+        println("!!!${words}")
 
 
     } // ON CREATE
+
+
 
 
     private fun getProfileInfo() {
