@@ -33,7 +33,7 @@ class PostItem : AppCompatActivity() {
     private var firebaseStorage: FirebaseStorage? = null
     private var storageReference: StorageReference? = null
 
-    private lateinit var memoryCache: LruCache<String, Bitmap>
+
 
     companion object {
         private val IMAGE_PICK_CODE = 1000
@@ -60,11 +60,7 @@ class PostItem : AppCompatActivity() {
         val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
         val cacheSize = maxMemory / 8
 
-        memoryCache = object : LruCache<String, Bitmap>(cacheSize) {
-            override fun sizeOf(key: String?, value: Bitmap?): Int {
-                return super.sizeOf(key, value)
-            }
-        }
+
 
 
         addDonateItem.setOnClickListener {

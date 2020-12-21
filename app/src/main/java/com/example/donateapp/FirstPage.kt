@@ -3,6 +3,11 @@ package com.example.donateapp
 //import com.bumptech.glide.request.RequestOptions
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Base64
+import android.util.LruCache
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -29,6 +34,7 @@ class FirstPage : AppCompatActivity() {
     private var itemUid = ""
     private var uid = ""
     private var imageUrl = ""
+    private lateinit var memoryCache: LruCache<String, Bitmap>
     private var internetConnection = false
 
 
@@ -45,7 +51,49 @@ class FirstPage : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
-        val itemImage = findViewById<ImageView>(R.id.item_image)
+        //val itemImage = findViewById<ImageView>(R.id.item_image)
+
+        //Encryption
+        var map = Encryption().encrypt("Mitt hemliga meddelande".toByteArray(), "hejhejhej".toCharArray())
+
+        val base64Encrypted = Base64.encodeToString(map["encrypted"], Base64.NO_WRAP)
+        val base64Iv = Base64.encodeToString(map["iv"], Base64.NO_WRAP)
+        val base64Salt = Base64.encodeToString(map["salt"], Base64.NO_WRAP)
+
+        println("!!! Encrypted Message:"+base64Encrypted)
+
+        val cache = LruChache<String>(2)
+
+        val message = "Hallå"
+        cache.put("1", message)
+        cache.put("2", "Two")
+
+        cache.get("1")
+        cache.put("3", "Three")
+
+        //assert((cache.get("1") == "One"))
+
+        println("!!! cache data:" +cache.get("1"))
+
+        //Decoding
+        val encrypted = Base64.decode(base64Encrypted, Base64.NO_WRAP)
+        val iv = Base64.decode(base64Iv, Base64.NO_WRAP)
+        val salt = Base64.decode(base64Salt, Base64.NO_WRAP)
+
+        val decrypted = Encryption().decrypt(
+            hashMapOf("iv" to iv, "salt" to salt, "encrypted" to encrypted), "hejhejhej".toCharArray())
+
+
+        //Decrypting the message to string
+        var decryptedMessage: String? = null
+        decrypted?.let {
+            decryptedMessage = String(it, Charsets.UTF_8)
+        }
+
+
+        println("!!!Decrypted Message:"+decryptedMessage)
+
+
 
         val adapter = ItemAdapter(this, itemList)
         val recyclerView = findViewById<RecyclerView>(R.id.test_list)
@@ -58,9 +106,26 @@ class FirstPage : AppCompatActivity() {
             uid = auth.currentUser!!.uid
         }
 
-        //val bottomHome = findViewById<TextView>(R.id.title_text)
-        //val textDescription = findViewById<TextView>(R.id.addButton)
-        //val homeIcon = findViewById<ImageView>(R.id.home_icon)
+
+        /*memoryCache = object : LruCache<String, Bitmap>(cacheSize) {
+            override fun sizeOf(key: String?, value: Bitmap?): Int {
+                return super.sizeOf(key, value)
+            }
+        } */
+
+        /*fun loadBitmap(resId: Int, imageView: ImageView) {
+            val imageKey: String = resId.toString()
+
+            val bitmap: Bitmap? = getBitmapFromMemCache(imageKey)?.also {
+                itemImage.setImageBitmap(it)
+            } ?: run {
+                itemImage.setImageResource(R.drawable.ite)
+                val task = BitmapWorkerTask()
+                task.execute(resId)
+                null
+            }
+        } */
+        
 
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
@@ -89,7 +154,7 @@ class FirstPage : AppCompatActivity() {
                     if (item != null) {
                         itemList.add(item)
                         println("!!! ${item.item_image_url}")
-                        imageUrl = item!!.item_image_url.toString()
+                        imageUrl = item.item_image_url.toString()
                     }
                     adapter.notifyDataSetChanged()
                 }
@@ -107,7 +172,7 @@ class FirstPage : AppCompatActivity() {
                 for (document in documentSnapshot.documents) {
                     val newItem = document!!.toObject(Items::class.java)
                     if (newItem != null) {
-                        val bild = newItem.item_image_url
+                        //val bild = newItem.item_image_url
                     }
                 }
                 //ConnectivityUtils.isConnected(this)

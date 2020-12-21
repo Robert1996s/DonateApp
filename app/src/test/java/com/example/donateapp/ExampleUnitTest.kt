@@ -15,7 +15,6 @@ import org.junit.Rule
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
-
     val sut = LogInScreen() // SUT = System Under Test (Unit Test)
 
 
@@ -73,5 +72,3 @@ class ExampleUnitTest {
 
 
 }
-
-
