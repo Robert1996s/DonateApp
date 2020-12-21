@@ -61,19 +61,23 @@ class ProfileScreen : AppCompatActivity() {
             if( snapshot != null ) {
                 for (document in snapshot.documents) {
                     val item = document.toObject(Items::class.java)
-                    if(item != null)
+
+                    if(item != null){
+
                     //imageUrl = temp!!.item_image_url.toString()
-                    println("!!! ${item?.title}")
-                    println("!!! ${item?.description}")
-                    println("!!! ${item?.item_image_url}")
+                 //   println("!!! ${item?.title}")
+                   // println("!!! ${item?.description}")
+                    //println("!!! ${item?.item_image_url}")
                 }
+
+                }
+
             }
         }
 
 
 
         var words = arrayListOf<String>("banan", "zebra", "annanas", "Bamse","Dolly", "Örjan")
-
 
         fun bubbleSortAlphabet(words: ArrayList<String>): ArrayList<String> {
             println("!! påbörjar sortering")
@@ -95,7 +99,6 @@ class ProfileScreen : AppCompatActivity() {
                         words[i] = words[i + 1]
                         words[i + 1] = temp
                         swap = true
-
                     }
                     print("!!!change:${changes}${words}")
                 }
@@ -107,13 +110,9 @@ class ProfileScreen : AppCompatActivity() {
         bubbleSortAlphabet(words)
         println("!!!${words}")
 
-
     } // ON CREATE
 
-
-
-
-    private fun getProfileInfo() {
+private fun getProfileInfo() {
 
         val docRef = db.collection("users").document(uid)
         val userNameText = findViewById<TextView>(R.id.username_display)

@@ -14,8 +14,9 @@ import org.junit.Rule
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class ExampleUnitTest {
-    val sut = LogInScreen() // SUT = System Under Test (Unit Test)
+class NewExampleUnitTest {
+
+    val sut = LogInScreen()
 
 
     @Test
@@ -25,24 +26,15 @@ class ExampleUnitTest {
 
 
     @Test
-    fun checkForEmptyFieldBlock() {
+    fun LogginTrue() {
 
-        assert(testThatLoginWontLetUsHAveEmptyField())
-
-    }
-
-    @Test
-    fun checkForTooLongFieldBlock() {
-
-        assert(testThatLoginWontLetUsHAveTooLongField())
+            assert(testThatLoginWontLetUsHAveEmptyField())
 
     }
-
-
 
     fun testThatLoginWontLetUsHAveEmptyField(): Boolean {
 
-       if (sut.checkLoggedIn("","") == false){
+       if (sut.checkLoggedIn("jgheryfjfkdodkdksjeufhjfjfurkdidjskwjekdjskeudhjdksjhre","geegrg") == false){
            println("den lät oss inte logga in, den fångade upp att vi inte angav alla värden")
            return true
        } else{
@@ -53,22 +45,6 @@ class ExampleUnitTest {
 
     }
 
-    fun testThatLoginWontLetUsHAveTooLongField(): Boolean {
-
-        var testvariable = "fffffffffffffffffffffffffffffffffffffffffffffjoifwewe"
-
-        if (sut.checkLoggedIn(testvariable,"grg") == false){
-            println("den lät oss inte logga in, den fångade upp att vi inte angav alla värden")
-            return true
-        } else{
-
-            return false
-
-        }
-
-    }
-
-
-
-
 }
+
+

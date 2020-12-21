@@ -30,6 +30,12 @@ class LogInScreen : AppCompatActivity() {
     lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
 
+    fun hej():Int{
+
+        return 3
+
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,9 +93,11 @@ class LogInScreen : AppCompatActivity() {
         val intent = Intent(this, UserSignUp::class.java)
         startActivity(intent)
     }
-    private fun checkLoggedIn (emailInput: String, passwordInput: String) {
-        if (emailInput == "" || passwordInput == "") {
+
+    fun checkLoggedIn (emailInput: String, passwordInput: String):Boolean {
+        if (emailInput == "" || passwordInput == "" || emailInput.length >50) {
             println("!!!Wrong Input")
+            return false
         }
         else {
             auth.signInWithEmailAndPassword(emailInput, passwordInput)
@@ -97,8 +105,11 @@ class LogInScreen : AppCompatActivity() {
                     if (task.isSuccessful) {
                         println("!!!Logged In")
                         toFirstPage()
+
                     }
+
                 }
+            return true
         }
     }
 }
