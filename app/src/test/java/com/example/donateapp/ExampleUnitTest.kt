@@ -1,11 +1,7 @@
 package com.example.donateapp
 
-import androidx.appcompat.app.AppCompatActivity
-import com.google.common.base.Predicates.equalTo
 import org.junit.Test
 import org.junit.Assert.*
-import org.junit.Assert.assertThat
-import org.junit.Before
 import org.junit.Rule
 
 
@@ -16,7 +12,7 @@ import org.junit.Rule
  */
 class ExampleUnitTest {
     val sut = LogInScreen() // SUT = System Under Test (Unit Test)
-
+    internal val encrypt = Encryption()
 
     @Test
     fun addition_isCorrect() {
@@ -37,6 +33,21 @@ class ExampleUnitTest {
         assert(testThatLoginWontLetUsHAveTooLongField())
 
     }
+
+    /*
+    fun encryptionCheck () {
+        val testString = "Test String to encrypt"
+        val encryptedString = Encryption.encrypt(testString)
+
+
+        assertNotEquals(testString, encryptedString)
+
+        val decryptedString = Encryption.decrypt(encryptedString)
+        assertEquals(testString, decryptedString)
+
+       // println("???${encryptedString}")
+    }
+     */
 
 
 
@@ -67,6 +78,11 @@ class ExampleUnitTest {
         }
 
     }
+
+
+
+
+
 
 
 

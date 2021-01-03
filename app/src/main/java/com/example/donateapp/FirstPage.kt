@@ -11,12 +11,9 @@ import android.util.LruCache
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -24,6 +21,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.fasterxml.jackson.module.kotlin.*
 
 
 class FirstPage : AppCompatActivity() {
@@ -62,14 +60,19 @@ class FirstPage : AppCompatActivity() {
 
         println("!!! Encrypted Message:"+base64Encrypted)
 
-        val cache = LruChache<String>(2)
+        val mapper = jacksonObjectMapper()
+        val cache = LruChache <String>(2)
 
-        val message = "Hallå"
-        cache.put("1", message)
-        cache.put("2", "Two")
+        //val message = "hallå"
+        cache.put("1", itemList.toString())
+        //cache.put("2", "Two")
 
         cache.get("1")
-        cache.put("3", "Three")
+        //cache.put("3", "Three")
+
+        //För att se att vi cachar ut data ur databsen
+        val getJson = mapper.writeValueAsString(itemList)
+        //println("!!!${getJson}")
 
         //assert((cache.get("1") == "One"))
 
@@ -157,12 +160,16 @@ class FirstPage : AppCompatActivity() {
                         imageUrl = item.item_image_url.toString()
                     }
                     adapter.notifyDataSetChanged()
+
+                    var json = mapper.writeValueAsString(item)
+                    //println("!!!getData${json}")
                 }
             }
-            println("!!!Logged In As: ${auth.currentUser?.email}")
+            //println("!!!Logged In As: ${auth.currentUser?.email}")
             getData()
         }
         updateImage(imageUrl)
+        println("!!!getJson${getJson}")
     } // ON CREATE
 
     private fun getData () {
@@ -239,9 +246,9 @@ class FirstPage : AppCompatActivity() {
         }
         else {
             println("!!! NO ACCESS") // Cache
+            
         }
     }
-
 
 
 

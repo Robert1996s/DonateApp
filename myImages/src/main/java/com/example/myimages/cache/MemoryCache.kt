@@ -26,7 +26,7 @@ class MemoryCache (newMaxSize: Int) : ImageCache {
      fun put(url: String, bitmap: Bitmap) {
         cache.put(url,bitmap)
     }
-
+    /*
     override fun get(url: String): Bitmap? {
         return cache.get(url)
     }
@@ -34,4 +34,5 @@ class MemoryCache (newMaxSize: Int) : ImageCache {
     override fun clear() {
         cache.evictAll()
     }
+    */
 }

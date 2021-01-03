@@ -1,6 +1,7 @@
 package com.example.donateapp
 
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import java.lang.Exception
 import java.security.SecureRandom
 import javax.crypto.Cipher
@@ -9,9 +10,9 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
-internal class Encryption {
+ internal class Encryption {
 
-    fun encrypt(data: ByteArray,
+     fun encrypt(data: ByteArray,
                 password: CharArray): HashMap<String, ByteArray> {
 
         val map = HashMap<String, ByteArray>()
@@ -45,7 +46,7 @@ internal class Encryption {
         return map
     }
 
-    fun decrypt (map: HashMap<String, ByteArray>, password: CharArray): ByteArray? {
+    fun decrypt (map: HashMap <String, ByteArray>, password: CharArray): ByteArray? {
         var decrypted: ByteArray? = null
 
         try {

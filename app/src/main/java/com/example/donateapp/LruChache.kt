@@ -1,7 +1,5 @@
 package com.example.donateapp
 
-import android.graphics.Bitmap
-import android.util.Log
 import android.util.LruCache
 
 
@@ -25,7 +23,7 @@ private lateinit var memoryCache: LruCache<String, String>
      }
 
 
-    fun put(key: String, value: T) {
+     fun put(key: String, value: T) {
         internalCache.put(key, value)
     }
 
