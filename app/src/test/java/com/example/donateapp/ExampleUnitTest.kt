@@ -1,10 +1,10 @@
 package com.example.donateapp
 
+
 import android.util.Base64
 import org.junit.Test
 import org.junit.Assert.*
 import com.example.donateapp.Encryption
-
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -13,8 +13,10 @@ import com.example.donateapp.Encryption
  */
 class ExampleUnitTest {
     val sut = LogInScreen() // SUT = System Under Test (Unit Test)
-    val sut1 = Encryption()
+  
+    internal val encrypt = Encryption()
 
+    val sut1 = Encryption()
 
     @Test
     fun addition_isCorrect() {
@@ -38,11 +40,11 @@ class ExampleUnitTest {
     } */
 
 
+
     @Test
     fun encryptionCheck() {
 
         val testString = "Test String to encrypt"
-
 
         val encryptedString = Encryption().encrypt(testString.toByteArray(), testString.toCharArray())
 
@@ -97,9 +99,6 @@ class ExampleUnitTest {
             return false
         }
     }
-
-
-
 
     /*fun testThatLoginWontLetUsHAveTooLongField(): Boolean {
 

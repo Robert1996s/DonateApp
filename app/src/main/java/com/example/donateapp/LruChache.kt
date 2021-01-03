@@ -1,7 +1,5 @@
 package com.example.donateapp
 
-import android.graphics.Bitmap
-import android.util.Log
 import android.util.LruCache
 
 
@@ -23,7 +21,6 @@ private lateinit var memoryCache: LruCache<String, String>
              return size > maxSize
          }
      }
-
 
     fun put(key: String, value: T) {
 

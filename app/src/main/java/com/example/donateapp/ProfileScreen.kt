@@ -49,6 +49,7 @@ class ProfileScreen : AppCompatActivity() {
 
 
 
+
         signOutBtn.setOnClickListener {
             logOut()
         }

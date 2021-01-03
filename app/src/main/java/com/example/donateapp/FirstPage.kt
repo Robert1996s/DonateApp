@@ -23,9 +23,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.fasterxml.jackson.module.kotlin.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-
 
 class FirstPage : AppCompatActivity() {
 
@@ -61,6 +61,12 @@ class FirstPage : AppCompatActivity() {
 
         println("!!! Encrypted Message:"+base64Encrypted)
 
+        val mapper = jacksonObjectMapper()
+      
+        //För att se att vi cachar ut data ur databsen
+        val getJson = mapper.writeValueAsString(itemList)
+        //println("!!!${getJson}")
+
         val cache = LruChache<String>(4)
         val message = "Hallå"
         cache.put("1", message)
@@ -72,9 +78,6 @@ class FirstPage : AppCompatActivity() {
         val mapper = jacksonObjectMapper()
 
         //var jsonString = mapper.writeValueAsString(Items)
-
-
-
 
         //Decoding
         val encrypted = Base64.decode(base64Encrypted, Base64.NO_WRAP)
@@ -160,13 +163,16 @@ class FirstPage : AppCompatActivity() {
                         cacheKey++
                     }
                     adapter.notifyDataSetChanged()
+
+                    var json = mapper.writeValueAsString(item)
+                    //println("!!!getData${json}")
                 }
             }
-            getData()
         }
+         println("!!!getJson${getJson}")
+            getData()
         updateImage(imageUrl)
         println("!!!Logged In As: ${auth.currentUser?.email}")
-
 
     } // ON CREATE
 
@@ -244,14 +250,9 @@ class FirstPage : AppCompatActivity() {
         else {
             //  Get/Display the cache data
             println("!!! NO ACCESS") // Cache
+            
         }
     }
-
-
-
-
-
-
 
     /*private fun mergeSort(itemList: List<Int>): List<Int> {
         if (itemList.size <= 1) {
