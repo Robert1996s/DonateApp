@@ -22,6 +22,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_post_item.*
 import kotlinx.android.synthetic.main.row_card.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 
 
 class PostItem : AppCompatActivity() {
@@ -32,6 +34,7 @@ class PostItem : AppCompatActivity() {
     private var uid = ""
     private var firebaseStorage: FirebaseStorage? = null
     private var storageReference: StorageReference? = null
+    private lateinit var job: CompletableJob
 
 
 
@@ -57,15 +60,10 @@ class PostItem : AppCompatActivity() {
         val addDonateItem = findViewById<Button>(R.id.add_donate)
 
 
-        val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
-        val cacheSize = maxMemory / 8
-
-
-
 
         addDonateItem.setOnClickListener {
-            addDonatePost()
-            uploadImage()
+            backToRecyclerView()
+            checkInitialized()
         }
 
 
@@ -89,6 +87,7 @@ class PostItem : AppCompatActivity() {
             val item = Items(itemTitle, itemDescription, itemAdress, imageData)
             db.collection("items").add(item)
             db.collection("users").document(uid).collection("userItems").add(item)
+            backToRecyclerView()
         }
 
         // För att användaren inte ska vara kvar på sidan efter ha lagt till på knappen ska vyn försvinna. Kan skapa ett intent som skickar tillbaka till
@@ -158,7 +157,7 @@ class PostItem : AppCompatActivity() {
                         "Image Uploaded",
                         Toast.LENGTH_LONG
                     ).show()
-                    backToRecyclerView()
+                    //backToRecyclerView()
 
                 }?.addOnFailureListener {
                     Toast.makeText(
@@ -169,9 +168,51 @@ class PostItem : AppCompatActivity() {
                 }
         }
     }
+    
     private fun backToRecyclerView() {
         val intent = Intent(this, FirstPage::class.java)
         startActivity(intent)
+        finish()
+    }
+
+    //Check if job is initialized, if not initJob
+    private fun checkInitialized() {
+        if(!::job.isInitialized) {
+            initJob()
+        }
+        startJobOrCancel(job)
+    }
+
+    //Starts the job(coroutine)
+    private fun initJob() {
+        job = Job()
+        job.invokeOnCompletion {
+            println("${job} Is cancelled")
+            //If job is not completed, Toast or print line etc
+            //https://www.youtube.com/watch?v=UsHTxOILP5g&t=809s
+        }
+    }
+
+    // Starts a job if it is not active, Cancel the job if it is active
+    private fun startJobOrCancel (job: Job) {
+        if(job.isActive) {
+            addDonatePost()
+            println("${job} is already active")
+            resetJob()
+        }
+        else {
+            CoroutineScope(IO + job).launch {
+                println("${this} coroutine is activated with job ${job}")
+            }
+        }
+    }
+
+    //Cancel the job and resetting if the job is completed
+    private fun resetJob() {
+        if (job.isActive || job.isCompleted) {
+            job.cancel(CancellationException("Resetting job"))
+        }
+        initJob()
     }
 }
 
