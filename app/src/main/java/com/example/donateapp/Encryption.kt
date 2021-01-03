@@ -10,10 +10,12 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
- internal class Encryption {
 
-     fun encrypt(data: ByteArray,
-                password: CharArray): HashMap<String, ByteArray> {
+class Encryption {
+
+    fun encrypt(
+        data: ByteArray,
+        password: CharArray): HashMap<String, ByteArray> 
 
         val map = HashMap<String, ByteArray>()
 

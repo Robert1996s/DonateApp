@@ -42,8 +42,10 @@ class ProfileScreen : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         myItemList.add(Items("Bil", "En blå bil"))
+        myItemList.add(Items("zebra", "Ingen Häst!"))
         myItemList.add(Items("Cykel", "Oanvänd cykel"))
         myItemList.add(Items("Tekokare", "Nästan helt ny"))
+        myItemList.add(Items("Båt", "Gammal båt"))
 
 
 

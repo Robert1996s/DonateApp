@@ -13,16 +13,19 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.fasterxml.jackson.module.kotlin.*
-
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 
 class FirstPage : AppCompatActivity() {
 
@@ -32,8 +35,9 @@ class FirstPage : AppCompatActivity() {
     private var itemUid = ""
     private var uid = ""
     private var imageUrl = ""
-    private lateinit var memoryCache: LruCache<String, Bitmap>
+    private lateinit var memoryCache: LruCache<String, String>
     private var internetConnection = false
+    
 
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -41,19 +45,16 @@ class FirstPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
        var hasInternetType =  isOnline(this)
-
         println("Internet  status = "+hasInternetType)
-
         setContentView(R.layout.activity_first_page)
-
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
+        val titleText = findViewById<TextView>(R.id.title_text)
         //val itemImage = findViewById<ImageView>(R.id.item_image)
 
         //Encryption
         var map = Encryption().encrypt("Mitt hemliga meddelande".toByteArray(), "hejhejhej".toCharArray())
-
         val base64Encrypted = Base64.encodeToString(map["encrypted"], Base64.NO_WRAP)
         val base64Iv = Base64.encodeToString(map["iv"], Base64.NO_WRAP)
         val base64Salt = Base64.encodeToString(map["salt"], Base64.NO_WRAP)
@@ -61,22 +62,22 @@ class FirstPage : AppCompatActivity() {
         println("!!! Encrypted Message:"+base64Encrypted)
 
         val mapper = jacksonObjectMapper()
-        val cache = LruChache <String>(2)
-
-        //val message = "hallå"
-        cache.put("1", itemList.toString())
-        //cache.put("2", "Two")
-
-        cache.get("1")
-        //cache.put("3", "Three")
-
+      
         //För att se att vi cachar ut data ur databsen
         val getJson = mapper.writeValueAsString(itemList)
         //println("!!!${getJson}")
 
+        val cache = LruChache<String>(4)
+        val message = "Hallå"
+        cache.put("1", message)
+        println("!!!CACHE: ${cache.get("1")}")
+        cache.put("3", "Three")
+
         //assert((cache.get("1") == "One"))
 
-        println("!!! cache data:" +cache.get("1"))
+        val mapper = jacksonObjectMapper()
+
+        //var jsonString = mapper.writeValueAsString(Items)
 
         //Decoding
         val encrypted = Base64.decode(base64Encrypted, Base64.NO_WRAP)
@@ -92,7 +93,6 @@ class FirstPage : AppCompatActivity() {
         decrypted?.let {
             decryptedMessage = String(it, Charsets.UTF_8)
         }
-
 
         println("!!!Decrypted Message:"+decryptedMessage)
 
@@ -149,6 +149,7 @@ class FirstPage : AppCompatActivity() {
         }
 
         val docRef = db.collection("items")
+        var cacheKey = 1
         docRef.addSnapshotListener { snapshot, e ->
             if (snapshot != null) {
                 itemList.clear()
@@ -156,8 +157,10 @@ class FirstPage : AppCompatActivity() {
                     val item = document.toObject(Items::class.java)
                     if (item != null) {
                         itemList.add(item)
-                        println("!!! ${item.item_image_url}")
+                        val cacheTitle = item.title.toString()
                         imageUrl = item.item_image_url.toString()
+                        //cache.put(cacheKey.toString(), cacheTitle)
+                        cacheKey++
                     }
                     adapter.notifyDataSetChanged()
 
@@ -165,11 +168,12 @@ class FirstPage : AppCompatActivity() {
                     //println("!!!getData${json}")
                 }
             }
-            //println("!!!Logged In As: ${auth.currentUser?.email}")
-            getData()
         }
+         println("!!!getJson${getJson}")
+            getData()
         updateImage(imageUrl)
-        println("!!!getJson${getJson}")
+        println("!!!Logged In As: ${auth.currentUser?.email}")
+
     } // ON CREATE
 
     private fun getData () {
@@ -214,7 +218,7 @@ class FirstPage : AppCompatActivity() {
             if (capabilities != null) {
                 if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                     Log.d("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
-                    var networkvalue = "cellular"
+                    var networkvalue = "cellular/4G/5G"
                     internetConnection = true
                     checkInternet(internetConnection)
                     return networkvalue
@@ -240,17 +244,15 @@ class FirstPage : AppCompatActivity() {
     }
 
     private fun checkInternet(checkInternet : Boolean) {
-
         if (checkInternet) {
             println("!!! INTERNET ACCESS") // Internet
         }
         else {
+            //  Get/Display the cache data
             println("!!! NO ACCESS") // Cache
             
         }
     }
-
-
 
     /*private fun mergeSort(itemList: List<Int>): List<Int> {
         if (itemList.size <= 1) {
