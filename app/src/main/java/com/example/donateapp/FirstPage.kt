@@ -69,6 +69,8 @@ class FirstPage : AppCompatActivity() {
         //För att se att vi cachar ut data ur databsen
         val getJson = mapper.writeValueAsString(itemList)
 
+        println("!!!${getJson}")
+      
         val cache = LruChache<String>(8)
 
         InternetModel()
@@ -143,6 +145,9 @@ class FirstPage : AppCompatActivity() {
         }
 
         val docRef = db.collection("items")
+
+        //var cacheKey = 1
+
         docRef.addSnapshotListener { snapshot, e ->
             if (snapshot != null) {
                 itemList.clear()
@@ -150,8 +155,9 @@ class FirstPage : AppCompatActivity() {
                     val item = document.toObject(Items::class.java)
                     if (item != null) {
                         itemList.add(item)
-                        val cacheTitle = item.title.toString()
                         imageUrl = item.item_image_url.toString()
+                        //cacheKey++
+
                         mapper.writeValueAsString(cacheTitle)
                         cache.put("1", cacheTitle)
                         println("!!!getData${cache.get("1")}")
@@ -247,6 +253,7 @@ class FirstPage : AppCompatActivity() {
         else {
             //  Get/Display the cache data
             println("!!! NO ACCESS") // Cache
+
             
         }
     }
