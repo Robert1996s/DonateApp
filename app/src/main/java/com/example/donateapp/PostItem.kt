@@ -207,6 +207,7 @@ class PostItem : AppCompatActivity() {
         }
     }
 
+
     //Cancel the job and resetting if the job is completed
     private fun resetJob() {
         if (job.isActive || job.isCompleted) {

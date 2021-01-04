@@ -24,8 +24,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.fasterxml.jackson.module.kotlin.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
+
 
 class FirstPage : AppCompatActivity() {
 
@@ -65,19 +64,9 @@ class FirstPage : AppCompatActivity() {
       
         //För att se att vi cachar ut data ur databsen
         val getJson = mapper.writeValueAsString(itemList)
-        //println("!!!${getJson}")
+        println("!!!${getJson}")
 
         val cache = LruChache<String>(4)
-        val message = "Hallå"
-        cache.put("1", message)
-        println("!!!CACHE: ${cache.get("1")}")
-        cache.put("3", "Three")
-
-        //assert((cache.get("1") == "One"))
-
-        val mapper = jacksonObjectMapper()
-
-        //var jsonString = mapper.writeValueAsString(Items)
 
         //Decoding
         val encrypted = Base64.decode(base64Encrypted, Base64.NO_WRAP)
@@ -149,7 +138,7 @@ class FirstPage : AppCompatActivity() {
         }
 
         val docRef = db.collection("items")
-        var cacheKey = 1
+        //var cacheKey = 1
         docRef.addSnapshotListener { snapshot, e ->
             if (snapshot != null) {
                 itemList.clear()
@@ -157,19 +146,19 @@ class FirstPage : AppCompatActivity() {
                     val item = document.toObject(Items::class.java)
                     if (item != null) {
                         itemList.add(item)
-                        val cacheTitle = item.title.toString()
                         imageUrl = item.item_image_url.toString()
-                        //cache.put(cacheKey.toString(), cacheTitle)
-                        cacheKey++
+                        //cacheKey++
                     }
                     adapter.notifyDataSetChanged()
 
                     var json = mapper.writeValueAsString(item)
-                    //println("!!!getData${json}")
+                    println("!!!getData${json}")
+                    cache.put("1", json)
                 }
+                println("!!!${cache.get("1")}")
             }
         }
-         println("!!!getJson${getJson}")
+         //println("!!!getJson${getJson}")
             getData()
         updateImage(imageUrl)
         println("!!!Logged In As: ${auth.currentUser?.email}")
@@ -250,6 +239,7 @@ class FirstPage : AppCompatActivity() {
         else {
             //  Get/Display the cache data
             println("!!! NO ACCESS") // Cache
+
             
         }
     }
