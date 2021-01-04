@@ -24,7 +24,6 @@ private lateinit var memoryCache: LruCache<String, String>
      }
 
     fun put(key: String, value: T) {
-
         internalCache.put(key, value)
     }
 

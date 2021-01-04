@@ -57,7 +57,6 @@ class ExampleUnitTest {
 
 
     fun testThatLoginWontLetUsHAveEmptyField(): Boolean {
-
         if (sut.checkLoggedIn("", "") == false) {
             println("den lät oss inte logga in, den fångade upp att vi inte angav alla värden")
             return true
@@ -98,6 +97,8 @@ class ExampleUnitTest {
             return false
         }
     }
+
+
 
     /*fun testThatLoginWontLetUsHAveTooLongField(): Boolean {
 
