@@ -11,7 +11,7 @@ private lateinit var memoryCache: LruCache<String, String>
     val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
     val cacheSize = maxMemory / 8
 
-    private val memoryCache: LruCache<String, Bitmap>? = null
+    private val memoryCache: LruCache<String, String>? = null
          fun sizeOf(key: String?, value: String?): Int {
             return value!!.toInt()
         }
@@ -23,7 +23,6 @@ private lateinit var memoryCache: LruCache<String, String>
      }
 
     fun put(key: String, value: T) {
-
         internalCache.put(key, value)
     }
 

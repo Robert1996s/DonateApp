@@ -37,7 +37,6 @@ class PostItem : AppCompatActivity() {
     private lateinit var job: CompletableJob
 
 
-
     companion object {
         private val IMAGE_PICK_CODE = 1000
         private val PERMISSION_CODE = 1001
@@ -62,8 +61,8 @@ class PostItem : AppCompatActivity() {
 
 
         addDonateItem.setOnClickListener {
+            uploadItemDataThread ()
             backToRecyclerView()
-            checkInitialized()
         }
 
 
@@ -174,7 +173,7 @@ class PostItem : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
+    /*
     //Check if job is initialized, if not initJob
     private fun checkInitialized() {
         if(!::job.isInitialized) {
@@ -213,6 +212,14 @@ class PostItem : AppCompatActivity() {
             job.cancel(CancellationException("Resetting job"))
         }
         initJob()
+    } */
+
+    private fun uploadItemDataThread () {
+        val thread = Thread(Runnable {
+            addDonatePost()
+            println("!!!Data Uploaded Via Thread")
+        })
+        thread.start()
     }
 }
 

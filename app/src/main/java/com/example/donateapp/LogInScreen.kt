@@ -50,7 +50,6 @@ class LogInScreen : AppCompatActivity() {
 
 
 
-
         var shoppingItems = mutableListOf<Items>()
         val loginButton = findViewById<Button>(R.id.login_button)
         val signUpButton = findViewById<Button>(R.id.button_signup)
