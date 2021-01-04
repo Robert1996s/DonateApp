@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.concurrent.thread
 
 class ProfileScreen : AppCompatActivity() {
 
@@ -18,7 +19,6 @@ class ProfileScreen : AppCompatActivity() {
     private var myItemList = mutableListOf<Items>()
     private var uid = ""
     var imageLink = ""
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +33,17 @@ class ProfileScreen : AppCompatActivity() {
         val userNameText = findViewById<TextView>(R.id.username_display)
         val userEmailText = findViewById<TextView>(R.id.user_email_display)
         val signOutBtn = findViewById<Button>(R.id.signout_button)
+        val threadBtn = findViewById<Button>(R.id.button_thread)
 
+
+        threadBtn.setOnClickListener {
+            val thread = Thread(Runnable {
+                println("!!!Thread Sleep")
+                Thread.sleep(5000)
+                println("!!!Thread Woke UP")
+            })
+            thread.start()
+        }
 
 
         val adapter = ProfileListAdapter(this, myItemList)
@@ -126,7 +136,7 @@ private fun getProfileInfo() {
                 if (task.isSuccessful){
                     val document = task.result
                     if (document!!.exists()) {
-                        println("!!! Data exists! Data: ${document.data}")
+                        println("!!!Data: ${document.data}")
                         val userInfo = document.toObject(UserData::class.java)
 
                         userNameText.text = userInfo!!.display_name.toString()

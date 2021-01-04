@@ -15,7 +15,7 @@ class Encryption {
 
     fun encrypt(
         data: ByteArray,
-        password: CharArray): HashMap<String, ByteArray> 
+        password: CharArray): HashMap<String, ByteArray> {
 
         val map = HashMap<String, ByteArray>()
 

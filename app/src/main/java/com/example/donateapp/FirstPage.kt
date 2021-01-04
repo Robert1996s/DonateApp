@@ -24,8 +24,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.fasterxml.jackson.module.kotlin.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
 
 class FirstPage : AppCompatActivity() {
 
@@ -44,7 +42,7 @@ class FirstPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-       var hasInternetType =  isOnline(this)
+        var hasInternetType =  isOnline(this)
         println("Internet  status = "+hasInternetType)
         setContentView(R.layout.activity_first_page)
         db = FirebaseFirestore.getInstance()
@@ -52,6 +50,11 @@ class FirstPage : AppCompatActivity() {
 
         val titleText = findViewById<TextView>(R.id.title_text)
         //val itemImage = findViewById<ImageView>(R.id.item_image)
+
+
+        InternetModel()
+
+
 
         //Encryption
         var map = Encryption().encrypt("Mitt hemliga meddelande".toByteArray(), "hejhejhej".toCharArray())
@@ -65,27 +68,18 @@ class FirstPage : AppCompatActivity() {
       
         //För att se att vi cachar ut data ur databsen
         val getJson = mapper.writeValueAsString(itemList)
-        //println("!!!${getJson}")
 
-        val cache = LruChache<String>(4)
-        val message = "Hallå"
-        cache.put("1", message)
-        println("!!!CACHE: ${cache.get("1")}")
-        cache.put("3", "Three")
+        val cache = LruChache<String>(8)
 
-        //assert((cache.get("1") == "One"))
+        InternetModel()
 
-        val mapper = jacksonObjectMapper()
-
-        //var jsonString = mapper.writeValueAsString(Items)
 
         //Decoding
         val encrypted = Base64.decode(base64Encrypted, Base64.NO_WRAP)
         val iv = Base64.decode(base64Iv, Base64.NO_WRAP)
         val salt = Base64.decode(base64Salt, Base64.NO_WRAP)
 
-        val decrypted = Encryption().decrypt(
-            hashMapOf("iv" to iv, "salt" to salt, "encrypted" to encrypted), "hejhejhej".toCharArray())
+        val decrypted = Encryption().decrypt(hashMapOf("iv" to iv, "salt" to salt, "encrypted" to encrypted), "hejhejhej".toCharArray())
 
 
         //Decrypting the message to string
@@ -149,7 +143,6 @@ class FirstPage : AppCompatActivity() {
         }
 
         val docRef = db.collection("items")
-        var cacheKey = 1
         docRef.addSnapshotListener { snapshot, e ->
             if (snapshot != null) {
                 itemList.clear()
@@ -159,21 +152,24 @@ class FirstPage : AppCompatActivity() {
                         itemList.add(item)
                         val cacheTitle = item.title.toString()
                         imageUrl = item.item_image_url.toString()
-                        //cache.put(cacheKey.toString(), cacheTitle)
-                        cacheKey++
+                        mapper.writeValueAsString(cacheTitle)
+                        cache.put("1", cacheTitle)
+                        println("!!!getData${cache.get("1")}")
                     }
                     adapter.notifyDataSetChanged()
-
-                    var json = mapper.writeValueAsString(item)
-                    //println("!!!getData${json}")
                 }
+                println("!!!Data After Cache: ${cache.get("1")}")
             }
         }
-         println("!!!getJson${getJson}")
+         //println("!!!getJson${getJson}")
             getData()
         updateImage(imageUrl)
-        println("!!!Logged In As: ${auth.currentUser?.email}")
 
+
+
+
+
+        println("!!!Logged In As: ${auth.currentUser?.email}")
     } // ON CREATE
 
     private fun getData () {
@@ -183,7 +179,7 @@ class FirstPage : AppCompatActivity() {
                 for (document in documentSnapshot.documents) {
                     val newItem = document!!.toObject(Items::class.java)
                     if (newItem != null) {
-                        //val bild = newItem.item_image_url
+                        newItem.title
                     }
                 }
                 //ConnectivityUtils.isConnected(this)
@@ -216,12 +212,14 @@ class FirstPage : AppCompatActivity() {
         if (connectivityManager != null) {
             val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
             if (capabilities != null) {
+
                 if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                     Log.d("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
                     var networkvalue = "cellular/4G/5G"
                     internetConnection = true
                     checkInternet(internetConnection)
                     return networkvalue
+
                 } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                     Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
                     internetConnection = true
@@ -240,7 +238,6 @@ class FirstPage : AppCompatActivity() {
             }}
 
         return "none"
-
     }
 
     private fun checkInternet(checkInternet : Boolean) {
