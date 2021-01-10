@@ -34,7 +34,7 @@ class PostItem : AppCompatActivity() {
     private var uid = ""
     private var firebaseStorage: FirebaseStorage? = null
     private var storageReference: StorageReference? = null
-    private lateinit var job: CompletableJob
+    //private lateinit var job: CompletableJob
 
 
     companion object {
