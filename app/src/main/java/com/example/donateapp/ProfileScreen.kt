@@ -74,20 +74,12 @@ class ProfileScreen : AppCompatActivity() {
             if( snapshot != null ) {
                 for (document in snapshot.documents) {
                     val item = document.toObject(Items::class.java)
-
                     if(item != null){
-
-                    //imageUrl = temp!!.item_image_url.toString()
-                 //   println("!!! ${item?.title}")
-                   // println("!!! ${item?.description}")
-                    //println("!!! ${item?.item_image_url}")
+                        //println("")
+                    }
                 }
-
-                }
-
             }
         }
-
 
 
         var words = arrayListOf<String>("banan", "zebra", "annanas", "Bamse","Dolly", "Örjan")
