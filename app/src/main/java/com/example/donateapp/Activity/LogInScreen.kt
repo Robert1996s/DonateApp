@@ -1,41 +1,22 @@
-package com.example.donateapp
+package com.example.donateapp.Activity
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Base64.encodeToString
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.FirebaseApp
+import com.example.donateapp.DataClasses.Items
+import com.example.donateapp.Models.NetworkHandler
+import com.example.donateapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-import java.security.MessageDigest
-import java.security.SecureRandom
-import java.security.spec.PSSParameterSpec.DEFAULT
-import java.util.*
-import javax.crypto.Cipher
-import javax.crypto.SecretKeyFactory
-import javax.crypto.spec.IvParameterSpec
-import javax.crypto.spec.PBEKeySpec
-import javax.crypto.spec.SecretKeySpec
+import com.google.firebase.firestore.auth.User
 
 class LogInScreen : AppCompatActivity() {
 
     lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
-
-    fun hej():Int{
-
-        return 3
-
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,9 +27,13 @@ class LogInScreen : AppCompatActivity() {
         //val preferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         //val editor = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE).edit()
 
-        //Private och public key?
 
-
+        if (NetworkHandler.isOnline(this)) {
+            println("!!!Internet")
+        } else {
+            println("!!! NO Internet")
+            //Cache data
+        }
 
         var shoppingItems = mutableListOf<Items>()
         val loginButton = findViewById<Button>(R.id.login_button)
@@ -80,6 +65,7 @@ class LogInScreen : AppCompatActivity() {
         println("!!! NOT Logged IN")
     }
 
+        println("!!!Logged In As: ${auth.currentUser?.email}")
 
     } //ON CREATE
 
@@ -106,7 +92,6 @@ class LogInScreen : AppCompatActivity() {
                         toFirstPage()
 
                     }
-
                 }
             return true
         }

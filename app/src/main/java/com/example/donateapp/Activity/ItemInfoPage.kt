@@ -1,13 +1,11 @@
-package com.example.donateapp
+package com.example.donateapp.Activity
 
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.donateapp.R
 import kotlinx.android.synthetic.main.activity_detal_information.*
-import kotlinx.android.synthetic.main.activity_post_item.*
-import kotlinx.android.synthetic.main.row_card.*
 
-class DetalInformation : AppCompatActivity() {
+class ItemInfoPage : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

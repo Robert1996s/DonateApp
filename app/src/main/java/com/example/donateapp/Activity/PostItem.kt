@@ -1,29 +1,24 @@
-package com.example.donateapp
+package com.example.donateapp.Activity
 
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.LruCache
 import android.widget.*
 import androidx.core.app.ActivityCompat
-import androidx.core.view.isEmpty
+import com.example.donateapp.DataClasses.Items
+import com.example.donateapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_detal_information.view.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_post_item.*
-import kotlinx.android.synthetic.main.row_card.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
 
 
 class PostItem : AppCompatActivity() {
@@ -35,7 +30,6 @@ class PostItem : AppCompatActivity() {
     private var firebaseStorage: FirebaseStorage? = null
     private var storageReference: StorageReference? = null
     //private lateinit var job: CompletableJob
-
 
     companion object {
         private val IMAGE_PICK_CODE = 1000
@@ -58,13 +52,10 @@ class PostItem : AppCompatActivity() {
         val addPicture = findViewById<Button>(R.id.addPicture)
         val addDonateItem = findViewById<Button>(R.id.add_donate)
 
-
-
         addDonateItem.setOnClickListener {
             uploadItemDataThread ()
             backToRecyclerView()
         }
-
 
         addPicture.setOnClickListener {
 
@@ -83,7 +74,12 @@ class PostItem : AppCompatActivity() {
             Toast.makeText(applicationContext, "Wrong Input", Toast.LENGTH_SHORT).show()
 
         } else {
-            val item = Items(itemTitle, itemDescription, itemAdress, imageData)
+            val item = Items(
+                itemTitle,
+                itemDescription,
+                itemAdress,
+                imageData
+            )
             db.collection("items").add(item)
             db.collection("users").document(uid).collection("userItems").add(item)
             backToRecyclerView()
@@ -91,7 +87,6 @@ class PostItem : AppCompatActivity() {
 
         // För att användaren inte ska vara kvar på sidan efter ha lagt till på knappen ska vyn försvinna. Kan skapa ett intent som skickar tillbaka till
         // den sida man ska komma till och gör en finish()
-
     }
 
     private fun addPicture() {
@@ -102,7 +97,9 @@ class PostItem : AppCompatActivity() {
                 ) == PackageManager.PERMISSION_DENIED
             ) {
                 val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-                requestPermissions(permissions, PERMISSION_CODE)
+                requestPermissions(permissions,
+                    PERMISSION_CODE
+                )
             } else {
                 chooseImageGallery()
             }
@@ -111,11 +108,12 @@ class PostItem : AppCompatActivity() {
         }
     }
 
-
     private fun chooseImageGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
-        startActivityForResult(intent, IMAGE_PICK_CODE)
+        startActivityForResult(intent,
+            IMAGE_PICK_CODE
+        )
     }
 
 
@@ -173,47 +171,6 @@ class PostItem : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-    /*
-    //Check if job is initialized, if not initJob
-    private fun checkInitialized() {
-        if(!::job.isInitialized) {
-            initJob()
-        }
-        startJobOrCancel(job)
-    }
-
-    //Starts the job(coroutine)
-    private fun initJob() {
-        job = Job()
-        job.invokeOnCompletion {
-            println("${job} Is cancelled")
-            //If job is not completed, Toast or print line etc
-            //https://www.youtube.com/watch?v=UsHTxOILP5g&t=809s
-        }
-    }
-
-    // Starts a job if it is not active, Cancel the job if it is active
-    private fun startJobOrCancel (job: Job) {
-        if(job.isActive) {
-            addDonatePost()
-            println("${job} is already active")
-            resetJob()
-        }
-        else {
-            CoroutineScope(IO + job).launch {
-                println("${this} coroutine is activated with job ${job}")
-            }
-        }
-    }
-
-
-    //Cancel the job and resetting if the job is completed
-    private fun resetJob() {
-        if (job.isActive || job.isCompleted) {
-            job.cancel(CancellationException("Resetting job"))
-        }
-        initJob()
-    } */
 
     private fun uploadItemDataThread () {
         val thread = Thread(Runnable {

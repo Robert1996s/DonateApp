@@ -1,4 +1,4 @@
-package com.example.donateapp
+package com.example.donateapp.Activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,10 +7,13 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.donateapp.DataClasses.Items
+import com.example.donateapp.ProfileListAdapter
+import com.example.donateapp.R
+import com.example.donateapp.DataClasses.UserData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.concurrent.thread
 
 class ProfileScreen : AppCompatActivity() {
 
@@ -51,13 +54,36 @@ class ProfileScreen : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-        myItemList.add(Items("Bil", "En blå bil"))
-        myItemList.add(Items("zebra", "Ingen Häst!"))
-        myItemList.add(Items("Cykel", "Oanvänd cykel"))
-        myItemList.add(Items("Tekokare", "Nästan helt ny"))
-        myItemList.add(Items("Båt", "Gammal båt"))
-
-
+        myItemList.add(
+            Items(
+                "Bil",
+                "En blå bil"
+            )
+        )
+        myItemList.add(
+            Items(
+                "zebra",
+                "Ingen Häst!"
+            )
+        )
+        myItemList.add(
+            Items(
+                "Cykel",
+                "Oanvänd cykel"
+            )
+        )
+        myItemList.add(
+            Items(
+                "Tekokare",
+                "Nästan helt ny"
+            )
+        )
+        myItemList.add(
+            Items(
+                "Båt",
+                "Gammal båt"
+            )
+        )
 
 
         signOutBtn.setOnClickListener {

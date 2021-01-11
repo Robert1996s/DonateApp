@@ -1,12 +1,8 @@
 package com.example.donateapp
 
-import androidx.appcompat.app.AppCompatActivity
-import com.google.common.base.Predicates.equalTo
+import com.example.donateapp.Activity.LogInScreen
 import org.junit.Test
 import org.junit.Assert.*
-import org.junit.Assert.assertThat
-import org.junit.Before
-import org.junit.Rule
 
 
 /**

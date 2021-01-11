@@ -1,4 +1,4 @@
-package com.example.donateapp
+package com.example.donateapp.Models
 
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity

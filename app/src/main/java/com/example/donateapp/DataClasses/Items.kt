@@ -1,4 +1,4 @@
-package com.example.donateapp
+package com.example.donateapp.DataClasses
 
 class Items(
     val title: String? = null,

@@ -15,13 +15,13 @@
         android:theme="@style/AppTheme"
         android:installLocation="internalOnly">
         <activity
-            android:name=".DetalInformation"
-            android:parentActivityName=".FirstPage" />
-        <activity android:name=".ProfileScreen" />
-        <activity android:name=".PostItem" />
-        <activity android:name=".FirstPage" />
-        <activity android:name=".UserSignUp" />
-        <activity android:name=".LogInScreen">
+            android:name=".Activity.ItemInfoPage"
+            android:parentActivityName=".Activity.FirstPage" />
+        <activity android:name=".Activity.ProfileScreen" />
+        <activity android:name=".Activity.PostItem" />
+        <activity android:name=".Activity.FirstPage" />
+        <activity android:name=".Activity.UserSignUp" />
+        <activity android:name=".Activity.LogInScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
