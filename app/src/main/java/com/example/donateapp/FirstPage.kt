@@ -127,6 +127,7 @@ class FirstPage : AppCompatActivity() {
             }
         } */
         
+
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
@@ -146,7 +147,6 @@ class FirstPage : AppCompatActivity() {
         }
 
         val docRef = db.collection("items")
-
         docRef.addSnapshotListener { snapshot, e ->
             if (snapshot != null) {
                 var cacheKey = 1
@@ -155,21 +155,11 @@ class FirstPage : AppCompatActivity() {
                     val item = document.toObject(Items::class.java)
                     if (item != null) {
                         itemList.add(item)
-
-                        imageUrl = item.item_image_url.toString()
-                        val cacheTitle = item.title.toString()
-                        cacheKey++
-
-                        mapper.writeValueAsString(cacheTitle)
-                        cache.put("1", cacheTitle)
-                        println("!!!getData${cache.get("1")}")
-
                         val cacheTitle = item.title.toString()
                         //imageUrl = item.item_image_url.toString()
                         jsonStr = mapper.writeValueAsString(item)
                         cache.put(cacheKey.toString(), jsonStr)
                         println("!!!JSONSTRING: ${jsonStr}")
-
                     }
                     adapter.notifyDataSetChanged()
                     cacheKey++
@@ -285,4 +275,31 @@ class FirstPage : AppCompatActivity() {
         println("!!!Cache1 ITEM: " + item.title)
     }
 
-    
+    /*private fun mergeSort(itemList: List<Int>): List<Int> {
+        if (itemList.size <= 1) {
+            return itemList
+        }
+        val middle = itemList.size / 2
+        var left = itemList.subList(0, middle)
+        var right = itemList.subList(middle,itemList.size)
+
+        //return merge(mergeSort(left), mergeSort(right))
+        return merge(mergeSort(left), mergeSort(right))
+    }
+
+    private fun merge(left: List<Int>, right: List<Int>) {
+        var indexLeft = 0
+        var indexRight = 0
+        var newList : MutableList<Int> = mutableListOf()
+
+        while (indexLeft < left.count() && indexRight < right.count()) {
+            if (left[indexLeft] <= right[indexRight]) {
+                newList.add(left[indexLeft])
+                indexLeft++
+            } else {
+                newList.add(right[indexRight])
+            }
+        }
+    } */
+
+}
