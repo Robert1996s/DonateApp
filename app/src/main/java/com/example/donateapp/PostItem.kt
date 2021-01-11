@@ -22,8 +22,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_post_item.*
 import kotlinx.android.synthetic.main.row_card.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
 
 
 class PostItem : AppCompatActivity() {
