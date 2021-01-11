@@ -146,7 +146,7 @@ class FirstPage : AppCompatActivity() {
 
         val docRef = db.collection("items")
 
-        //var cacheKey = 1
+        var cacheKey = 0
 
         docRef.addSnapshotListener { snapshot, e ->
             if (snapshot != null) {
@@ -156,7 +156,8 @@ class FirstPage : AppCompatActivity() {
                     if (item != null) {
                         itemList.add(item)
                         imageUrl = item.item_image_url.toString()
-                        //cacheKey++
+                        val cacheTitle = item.title.toString()
+                        cacheKey++
 
                         mapper.writeValueAsString(cacheTitle)
                         cache.put("1", cacheTitle)
