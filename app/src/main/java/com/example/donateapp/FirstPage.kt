@@ -35,6 +35,8 @@ class FirstPage : AppCompatActivity() {
     private var imageUrl = ""
     private lateinit var memoryCache: LruCache<String, String>
     private var internetConnection = false
+    private var jsonStr = ""
+    private val cache = LruChache<String>(8)
     
 
 
@@ -71,7 +73,7 @@ class FirstPage : AppCompatActivity() {
 
         println("!!!${getJson}")
       
-        val cache = LruChache<String>(8)
+        //val cache = LruChache<String>(8)
 
         InternetModel()
 
@@ -125,7 +127,6 @@ class FirstPage : AppCompatActivity() {
             }
         } */
         
-
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
@@ -146,15 +147,15 @@ class FirstPage : AppCompatActivity() {
 
         val docRef = db.collection("items")
 
-        var cacheKey = 0
-
         docRef.addSnapshotListener { snapshot, e ->
             if (snapshot != null) {
+                var cacheKey = 1
                 itemList.clear()
                 for (document in snapshot.documents) {
                     val item = document.toObject(Items::class.java)
                     if (item != null) {
                         itemList.add(item)
+
                         imageUrl = item.item_image_url.toString()
                         val cacheTitle = item.title.toString()
                         cacheKey++
@@ -162,22 +163,32 @@ class FirstPage : AppCompatActivity() {
                         mapper.writeValueAsString(cacheTitle)
                         cache.put("1", cacheTitle)
                         println("!!!getData${cache.get("1")}")
+
+                        val cacheTitle = item.title.toString()
+                        //imageUrl = item.item_image_url.toString()
+                        jsonStr = mapper.writeValueAsString(item)
+                        cache.put(cacheKey.toString(), jsonStr)
+                        println("!!!JSONSTRING: ${jsonStr}")
+
                     }
                     adapter.notifyDataSetChanged()
+                    cacheKey++
                 }
-                println("!!!Data After Cache: ${cache.get("1")}")
+                println("!!! GET CACHE" + cache.get("1"))
+                println("!!! GET CACHE" + cache.get("2"))
+                println("!!! GET CACHE" + cache.get("3"))
             }
+            getCacheData()
         }
-         //println("!!!getJson${getJson}")
-            getData()
+        getData()
         updateImage(imageUrl)
-
-
 
 
 
         println("!!!Logged In As: ${auth.currentUser?.email}")
     } // ON CREATE
+
+
 
     private fun getData () {
         val itemRef = db.collection("items")
@@ -255,35 +266,23 @@ class FirstPage : AppCompatActivity() {
             //  Get/Display the cache data
             println("!!! NO ACCESS") // Cache
 
-            
+            val cache1 = cache.get("1")
+            cache.get("2")
+            cache.get("3")
+            cache.get("4")
+            cache.get("5")
         }
     }
 
-    /*private fun mergeSort(itemList: List<Int>): List<Int> {
-        if (itemList.size <= 1) {
-            return itemList
-        }
-        val middle = itemList.size / 2
-        var left = itemList.subList(0, middle)
-        var right = itemList.subList(middle,itemList.size)
+    private fun getCacheData () {
 
-        //return merge(mergeSort(left), mergeSort(right))
-        return merge(mergeSort(left), mergeSort(right))
+        val cache1 = cache.get("1")
+        val cache2 = cache.get("2")
+        val cache3 = cache.get("3")
+        val mapper = jacksonObjectMapper()
+
+        val item:Items = mapper.readValue<Items>(cache1.toString())
+        println("!!!Cache1 ITEM: " + item.title)
     }
 
-    private fun merge(left: List<Int>, right: List<Int>) {
-        var indexLeft = 0
-        var indexRight = 0
-        var newList : MutableList<Int> = mutableListOf()
-
-        while (indexLeft < left.count() && indexRight < right.count()) {
-            if (left[indexLeft] <= right[indexRight]) {
-                newList.add(left[indexLeft])
-                indexLeft++
-            } else {
-                newList.add(right[indexRight])
-            }
-        }
-    } */
-
-}
+    
