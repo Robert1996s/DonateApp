@@ -1,6 +1,7 @@
 package com.example.donateapp.Activity
 
-//import com.bumptech.glide.request.RequestOptions
+
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.util.Base64
 import android.util.LruCache
 import android.os.Build
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,7 +32,6 @@ class FirstPage : AppCompatActivity() {
     lateinit var db: FirebaseFirestore
     lateinit var auth: FirebaseAuth
     private var itemList = mutableListOf<Items>()
-    private var itemUid = ""
     private var uid = ""
     private var imageUrl = ""
     private lateinit var memoryCache: LruCache<String, String>
@@ -39,6 +40,7 @@ class FirstPage : AppCompatActivity() {
     private val cacheKeys = mutableListOf<String>()
     private var cacheItemList = mutableListOf<Items>()
     private var cacheItemJson = mutableListOf<String>()
+    private var whichList = mutableListOf<Items>()
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,15 +48,19 @@ class FirstPage : AppCompatActivity() {
         setContentView(R.layout.activity_first_page)
 
         if (NetworkHandler.isOnline(this)) {
-            println("!!!Internet")
+            whichList = itemList
+            Toast.makeText(this, "FIREBASE DATA", Toast.LENGTH_LONG).show()
         } else {
-            println("!!! NO Internet")
             getCacheData()
+            whichList = cacheItemList
+            Toast.makeText(this, "CACHE LIST", Toast.LENGTH_LONG).show()
         }
+
 
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         val mapper = jacksonObjectMapper()
+
 
         //Encryption
         var map = Encryption()
@@ -80,12 +86,10 @@ class FirstPage : AppCompatActivity() {
 
         println("!!!Decrypted Message:"+decryptedMessage)
 
-        val adapter = ItemAdapter(this, itemList)
-        //val adapter1 = ItemAdapter(this, cacheItemList)
+        val adapter = ItemAdapter(this, whichList)
         val recyclerView = findViewById<RecyclerView>(R.id.test_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
-        //recyclerView.adapter = adapter1
 
         val currentUser: FirebaseUser? = auth.currentUser
         if (currentUser != null) {
@@ -120,7 +124,7 @@ class FirstPage : AppCompatActivity() {
                         jsonStr = mapper.writeValueAsString(item)
                         cache.put(cacheKey.toString(), jsonStr)
                         cacheKeys.add(cacheKey.toString())
-                        println("!!!JSONSTRING: ${jsonStr}")
+                        println("!!!Saving Data ${jsonStr}")
                         cacheItemJson.add(jsonStr)
                     }
                     adapter.notifyDataSetChanged()
@@ -141,11 +145,9 @@ class FirstPage : AppCompatActivity() {
                 for (document in documentSnapshot.documents) {
                     val newItem = document!!.toObject(Items::class.java)
                     if (newItem != null) {
-                        newItem.title
+
                     }
                 }
-                //ConnectivityUtils.isConnected(this)
-                //print("!!!!!!${ConnectivityUtils}")
             }
     }
 
@@ -168,18 +170,28 @@ class FirstPage : AppCompatActivity() {
         startActivity(intent)
     }
 
+    //Get and put the cache data into a list
     private fun getCacheData () {
         val mapper = jacksonObjectMapper()
         var cacheKey = 1
-        //val plats = cacheItemJson[0]
-        for (i in cacheKeys) {
-            cache.get(cacheKey.toString())
-            var cacheItem = mapper.readValue<Items>(jsonStr)
+        var jsonStrPosition = 0
+        var number = 0
+
+        for (i in cacheItemJson) {
+            //cache.get(cacheKey.toString())
+            var cacheItem = mapper.readValue<Items>(cacheItemJson[jsonStrPosition])
             cacheItemList.add(cacheItem)
             cacheKey++
+            jsonStrPosition++
         }
-        println("!!! CacheList: ${cacheItemList}") //Cachar jsonStr som senast är ett item(a), cachar det på varje plats i cachen.
-        println("!!! CacheListSIZE : ${cacheItemList[0].adress}")
+        println("!!! CacheList SIZE: ${cacheItemList.size}")
 
+        for (i in cacheItemList) {
+            println("!!! ITEM: ${number} ${cacheItemList[number].title}")
+            number++
+        }
+        //val preferences = getSharedPreferences("app_cache", Context.MODE_PRIVATE)
+        //title = preferences.getString("0", cacheItemJson[0]).toString()
+        //println("!!!TITLE: ${title}")
     }
 }

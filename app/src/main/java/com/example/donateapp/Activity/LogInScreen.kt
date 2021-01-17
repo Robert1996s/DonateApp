@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.example.donateapp.DataClasses.Items
 import com.example.donateapp.Models.NetworkHandler
 import com.example.donateapp.R
@@ -24,16 +25,12 @@ class LogInScreen : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
-        //val preferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        //val editor = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE).edit()
 
 
-        if (NetworkHandler.isOnline(this)) {
-            println("!!!Internet")
-        } else {
-            println("!!! NO Internet")
-            //Cache data
-        }
+
+
+
+
 
         var shoppingItems = mutableListOf<Items>()
         val loginButton = findViewById<Button>(R.id.login_button)
@@ -64,6 +61,15 @@ class LogInScreen : AppCompatActivity() {
         //Not logged in
         println("!!! NOT Logged IN")
     }
+
+        if (NetworkHandler.isOnline(this)) {
+            Toast.makeText(this, "Welcome ${currentUser?.email}", Toast.LENGTH_LONG).show()
+        } else {
+            println("!!! NO Internet")
+            Toast.makeText(this, "Internet Trouble?", Toast.LENGTH_LONG).show()
+        }
+
+
 
         println("!!!Logged In As: ${auth.currentUser?.email}")
 

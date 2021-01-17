@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.donateapp.Activity.ItemInfoPage
 import com.example.donateapp.DataClasses.Items
+import com.example.donateapp.Models.NetworkHandler
 
 class ItemAdapter (
 
