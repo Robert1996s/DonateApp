@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.donateapp.Activity.ItemInfoPage
 import com.example.donateapp.DataClasses.Items
+import com.example.donateapp.Models.GlobalItemList
 import com.example.donateapp.Models.NetworkHandler
 
 class ItemAdapter (
@@ -31,12 +32,16 @@ class ItemAdapter (
     }
     override fun getItemCount() = items.size
 
+    //override fun getItemCount() = GlobalItemList.globalItemList.size
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val item = items[position]
 
-        val itemTitle = item.title
+        //val item = GlobalItemList.globalItemList[position]
+
         val itemDesc = item.description
+        val itemTitle = item.title
         val itemImage = item.item_image_url
         holder.titleText.text = itemTitle
         holder.descriptionText.text = itemDesc

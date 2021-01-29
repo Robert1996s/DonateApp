@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import com.example.donateapp.DataClasses.Items
+import com.example.donateapp.Models.FirebaseData
 import com.example.donateapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -23,7 +24,6 @@ import kotlinx.coroutines.*
 
 class PostItem : AppCompatActivity() {
 
-    lateinit var db: FirebaseFirestore
     lateinit var auth: FirebaseAuth
     private var imageUri: Uri? = null
     private var uid = ""
@@ -40,7 +40,6 @@ class PostItem : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_item)
 
-        db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         firebaseStorage = FirebaseStorage.getInstance()
         storageReference = FirebaseStorage.getInstance().reference
@@ -53,40 +52,30 @@ class PostItem : AppCompatActivity() {
         val addDonateItem = findViewById<Button>(R.id.add_donate)
 
         addDonateItem.setOnClickListener {
-            uploadItemDataThread ()
-            backToRecyclerView()
+            //uploadItemDataThread ()
+            addDonatePost()
         }
 
         addPicture.setOnClickListener {
-
             addPicture()
         }
 
-    }
+    } // ON CREATE
+
+
 
     private fun addDonatePost() {
         val itemTitle = editTextDonate.text.toString()
         val itemAdress = editTextLocation.text.toString()
         val itemDescription = editTextFullDescription.text.toString()
-        val imageData = imageUri.toString()
 
         if (itemTitle.isEmpty() || itemAdress.isEmpty() || itemDescription.isEmpty()) {
             Toast.makeText(applicationContext, "Wrong Input", Toast.LENGTH_SHORT).show()
 
         } else {
-            val item = Items(
-                itemTitle,
-                itemDescription,
-                itemAdress,
-                imageData
-            )
-            db.collection("items").add(item)
-            db.collection("users").document(uid).collection("userItems").add(item)
+            FirebaseData().postData(itemTitle, itemDescription, itemAdress, uid)
             backToRecyclerView()
         }
-
-        // För att användaren inte ska vara kvar på sidan efter ha lagt till på knappen ska vyn försvinna. Kan skapa ett intent som skickar tillbaka till
-        // den sida man ska komma till och gör en finish()
     }
 
     private fun addPicture() {
@@ -116,7 +105,6 @@ class PostItem : AppCompatActivity() {
         )
     }
 
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -143,7 +131,7 @@ class PostItem : AppCompatActivity() {
     }
 
     //Laddar upp den valda bilder till firebase Storage, visar en toast som berättar för användaren om bilden laddades upp
-    private fun uploadImage() {
+    /*private fun uploadImage() {
 
         if (imageUri != null) {
             val docRef = storageReference?.child("ItemsUpload/itemImage" + uid)
@@ -164,7 +152,7 @@ class PostItem : AppCompatActivity() {
                     ).show()
                 }
         }
-    }
+    } */
     
     private fun backToRecyclerView() {
         val intent = Intent(this, FirstPage::class.java)
@@ -172,13 +160,6 @@ class PostItem : AppCompatActivity() {
         finish()
     }
 
-    private fun uploadItemDataThread () {
-        val thread = Thread(Runnable {
-            addDonatePost()
-            println("!!!Data Uploaded Via Thread")
-        })
-        thread.start()
-    }
 }
 
 

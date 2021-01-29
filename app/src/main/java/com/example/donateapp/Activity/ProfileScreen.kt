@@ -11,17 +11,20 @@ import com.example.donateapp.DataClasses.Items
 import com.example.donateapp.ProfileListAdapter
 import com.example.donateapp.R
 import com.example.donateapp.DataClasses.UserData
+import com.example.donateapp.Models.FirebaseData
+import com.example.donateapp.Models.GlobalItemList
+import com.example.donateapp.Models.GlobalUserItems
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_profile_screen.*
 
 class ProfileScreen : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    lateinit var db: FirebaseFirestore
     private var myItemList = mutableListOf<Items>()
     private var uid = ""
-    var imageLink = ""
+    //var imageLink = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,15 +32,24 @@ class ProfileScreen : AppCompatActivity() {
         setContentView(R.layout.activity_profile_screen)
 
         auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
-
         val currentUser: FirebaseUser? = auth.currentUser
-
-        val userNameText = findViewById<TextView>(R.id.username_display)
-        val userEmailText = findViewById<TextView>(R.id.user_email_display)
         val signOutBtn = findViewById<Button>(R.id.signout_button)
         val threadBtn = findViewById<Button>(R.id.button_thread)
 
+        if (currentUser != null){
+            uid = auth.currentUser!!.uid
+            //FirebaseData().getProfileInfo(uid)
+            getProfileInfo()
+        }
+
+
+        if (GlobalUserItems.globalUserItemList.size > 0) {
+            println("!!!Already Have items")
+        } else {
+            FirebaseData().getUserItemsData(uid)
+        }
+
+        println("!!! LIST SIZE PROFILE: ${GlobalItemList.globalItemList.size}")
 
         threadBtn.setOnClickListener {
             val thread = Thread(Runnable {
@@ -46,65 +58,16 @@ class ProfileScreen : AppCompatActivity() {
                 println("!!!Thread Woke UP")
             })
             thread.start()
+            backToRecyclerView()
         }
 
-
-        val adapter = ProfileListAdapter(this, myItemList)
+        val adapter = ProfileListAdapter(this, GlobalUserItems.globalUserItemList)
         val recyclerView = findViewById<RecyclerView>(R.id.my_items_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-        myItemList.add(
-            Items(
-                "Bil",
-                "En blå bil"
-            )
-        )
-        myItemList.add(
-            Items(
-                "zebra",
-                "Ingen Häst!"
-            )
-        )
-        myItemList.add(
-            Items(
-                "Cykel",
-                "Oanvänd cykel"
-            )
-        )
-        myItemList.add(
-            Items(
-                "Tekokare",
-                "Nästan helt ny"
-            )
-        )
-        myItemList.add(
-            Items(
-                "Båt",
-                "Gammal båt"
-            )
-        )
-
-
         signOutBtn.setOnClickListener {
             logOut()
-        }
-
-        if (currentUser != null){
-            uid = auth.currentUser!!.uid
-            getProfileInfo()
-        }
-
-        val docRef = db.collection("users").document(uid).collection("userItems")
-        docRef.addSnapshotListener{ snapshot, e ->
-            if( snapshot != null ) {
-                for (document in snapshot.documents) {
-                    val item = document.toObject(Items::class.java)
-                    if(item != null){
-                        //println("")
-                    }
-                }
-            }
         }
 
 
@@ -145,6 +108,8 @@ class ProfileScreen : AppCompatActivity() {
 
 private fun getProfileInfo() {
 
+        lateinit var db: FirebaseFirestore
+        db = FirebaseFirestore.getInstance()
         val docRef = db.collection("users").document(uid)
         val userNameText = findViewById<TextView>(R.id.username_display)
         val userEmailText = findViewById<TextView>(R.id.user_email_display)
@@ -164,54 +129,15 @@ private fun getProfileInfo() {
                         println("!!! Get profile data went wrong")
                     }
                 }
-                getMyItems()
+                //getMyItems()
             }
     }
 
-    private fun getMyItems() {
-        val docRef = db.collection("users").document(uid).collection("userItems")
-        docRef.get()
-            .addOnSuccessListener { documentSnapshot ->
-                for (document in documentSnapshot.documents) {
-                    val myItem = document!!.toObject(Items::class.java)
-                    if (myItem != null) {
-                        myItemList.add(myItem)
-                        println("!!!${myItem?.title}")
-                    }
-                }
-            }
+    private fun backToRecyclerView() {
+        val intent = Intent(this, FirstPage::class.java)
+        startActivity(intent)
+        finish()
     }
-
-    /*{ documentSnapshot ->
-        for (document in documentSnapshot.documents) {
-            val newItem = document!!.toObject(Items::class.java)
-            if (newItem != null) {
-                println("!!!${newItem?.title}")
-            }
-        }
-    } */
-
-    /*private fun bubbleSort (list:IntArray):IntArray {
-        var swap = true
-        while (swap) {
-            swap = false
-            for (i in 0 until list.size-1) {
-                if (list[i] > list[i + 1]) {
-                    val temp = list[i]
-                    list[i] = list[i + 1]
-                    list[i + 1] = temp
-                    swap = true
-                }
-            }
-        }
-        return list
-    }
-
-    private fun main(args: Array<String>) {
-        val list = bubbleSort(intArrayOf(2,15,1,8,4))
-        for (k in list) print("!!!$k ")
-    } */
-
 
     private fun logOut() {
         auth.signOut()

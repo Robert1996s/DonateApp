@@ -7,6 +7,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.example.donateapp.DataClasses.Items
+import com.example.donateapp.Models.FirebaseData
+import com.example.donateapp.Models.GlobalItemList
 import com.example.donateapp.Models.NetworkHandler
 import com.example.donateapp.R
 import com.google.firebase.auth.FirebaseAuth
@@ -26,17 +28,18 @@ class LogInScreen : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
 
-
-
-
-
-
-
         var shoppingItems = mutableListOf<Items>()
         val loginButton = findViewById<Button>(R.id.login_button)
         val signUpButton = findViewById<Button>(R.id.button_signup)
         val emailInput = findViewById<EditText>(R.id.userEmail_input)
         val passwordInput = findViewById<EditText>(R.id.password_input)
+
+
+
+
+
+
+
 
         loginButton.setOnClickListener {
             val emailInput = emailInput.text.toString()
@@ -52,9 +55,7 @@ class LogInScreen : AppCompatActivity() {
 
 
         if (currentUser != null) {
-            //User is logged in
-            val intent = Intent(this, FirstPage::class.java)
-            startActivity(intent)
+            toFirstPage()
         }
         else
     {
@@ -68,17 +69,15 @@ class LogInScreen : AppCompatActivity() {
             println("!!! NO Internet")
             Toast.makeText(this, "Internet Trouble?", Toast.LENGTH_LONG).show()
         }
-
-
-
         println("!!!Logged In As: ${auth.currentUser?.email}")
-
+        finish()
     } //ON CREATE
 
     private fun toFirstPage() {
         val intent = Intent(this, FirstPage::class.java)
         startActivity(intent)
     }
+
 
     private fun toUserSignUp() {
         val intent = Intent(this, UserSignUp::class.java)
@@ -95,11 +94,11 @@ class LogInScreen : AppCompatActivity() {
                 .addOnCompleteListener(this) {task ->
                     if (task.isSuccessful) {
                         println("!!!Logged In")
-                        toFirstPage()
-
+                        }
                     }
                 }
             return true
         }
-    }
 }
+
+

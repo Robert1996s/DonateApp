@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.donateapp.DataClasses.Items
+import com.example.donateapp.Models.GlobalUserItems
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -23,15 +24,20 @@ class ProfileListAdapter (
         return ViewHolder(itemView)
     }
 
-    override fun getItemCount() = userItems.size
+    //override fun getItemCount() = userItems.size  Bytt alla userItem till Globala listan
+
+    override fun getItemCount() = GlobalUserItems.globalUserItemList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = userItems[position]
+
+        val item = GlobalUserItems.globalUserItemList[position]
         val itemTitle = item.title
         val itemDesc = item.description
+        //val itemAdress: = item.adress
 
         holder.itemDesc.text = itemDesc
         holder.itemTitle.text = itemTitle
+        //holder.itemAdress.text = itemAdress
 
 
     }
@@ -42,7 +48,7 @@ class ProfileListAdapter (
 
         val user = auth.currentUser
 
-        val item = userItems[position]
+        val item = GlobalUserItems.globalUserItemList[position]
         db.collection("users").document(user!!.uid).collection("userItems").document(item.title.toString()).delete()
     }
 

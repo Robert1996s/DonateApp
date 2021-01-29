@@ -20,6 +20,5 @@ class ItemInfoPage : AppCompatActivity() {
         // set text from another activity?
         title_item.text = title
         title_description.text = titleDecscription
-
     }
 }
