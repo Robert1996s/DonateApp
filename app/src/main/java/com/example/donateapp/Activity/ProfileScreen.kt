@@ -3,28 +3,42 @@ package com.example.donateapp.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.viewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.donateapp.DataClasses.Items
+import com.example.donateapp.DataClasses.Model
+import com.example.donateapp.DataClasses.NameViewModel
 import com.example.donateapp.ProfileListAdapter
 import com.example.donateapp.R
-import com.example.donateapp.DataClasses.UserData
 import com.example.donateapp.Models.FirebaseData
 import com.example.donateapp.Models.GlobalItemList
 import com.example.donateapp.Models.GlobalUserItems
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_profile_screen.*
+import java.util.*
+import kotlin.collections.ArrayList
+import android.database.Observable as Observable1
 
-class ProfileScreen : AppCompatActivity() {
+class ProfileScreen() : AppCompatActivity(), java.util.Observer {
 
     private lateinit var auth: FirebaseAuth
     private var myItemList = mutableListOf<Items>()
     private var uid = ""
     //var imageLink = ""
+    private var data = ""
+    private val model: NameViewModel by viewModels()
+    var myModel: Model? = null
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,12 +49,32 @@ class ProfileScreen : AppCompatActivity() {
         val currentUser: FirebaseUser? = auth.currentUser
         val signOutBtn = findViewById<Button>(R.id.signout_button)
         val threadBtn = findViewById<Button>(R.id.button_thread)
+        val userName = findViewById<TextView>(R.id.username_display)
+        val userEmail = findViewById<TextView>(R.id.user_email_display)
 
         if (currentUser != null){
             uid = auth.currentUser!!.uid
-            //FirebaseData().getProfileInfo(uid)
-            getProfileInfo()
+            //data = FirebaseData().getProfileInfo(uid)
+            //println("!!!Email:${data} Name:${data}")
+            //data = username_display.text.toString()
+            //data.email = userEmail.text.toString()
         }
+
+        /*val nameObserver = Observer<String> { newName ->
+            username_display.text = newName
+        } */
+        //model.currentName.observe(this, nameObserver)
+
+
+
+        myModel = Model()
+        myModel!!.getData(uid)
+        myModel!!.addObserver(this)
+
+
+
+
+        println("!!!DATA: ${myModel}")
 
 
         if (GlobalUserItems.globalUserItemList.size > 0) {
@@ -54,12 +88,18 @@ class ProfileScreen : AppCompatActivity() {
         threadBtn.setOnClickListener {
             val thread = Thread(Runnable {
                 println("!!!Thread Sleep")
-                Thread.sleep(5000)
+                //Thread.sleep(5000)
                 println("!!!Thread Woke UP")
+                //val otherValue = "New Value"
+                //model.currentName.setValue(otherValue)
+
             })
+
             thread.start()
-            backToRecyclerView()
+            //backToRecyclerView()
         }
+
+        //observerData()
 
         val adapter = ProfileListAdapter(this, GlobalUserItems.globalUserItemList)
         val recyclerView = findViewById<RecyclerView>(R.id.my_items_list)
@@ -106,31 +146,10 @@ class ProfileScreen : AppCompatActivity() {
 
     } // ON CREATE
 
-private fun getProfileInfo() {
 
-        lateinit var db: FirebaseFirestore
-        db = FirebaseFirestore.getInstance()
-        val docRef = db.collection("users").document(uid)
-        val userNameText = findViewById<TextView>(R.id.username_display)
-        val userEmailText = findViewById<TextView>(R.id.user_email_display)
 
-        docRef.get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful){
-                    val document = task.result
-                    if (document!!.exists()) {
-                        println("!!!Data: ${document.data}")
-                        val userInfo = document.toObject(UserData::class.java)
-
-                        userNameText.text = userInfo!!.display_name.toString()
-                        userEmailText.text = userInfo.email.toString()
-                    }
-                    else {
-                        println("!!! Get profile data went wrong")
-                    }
-                }
-                //getMyItems()
-            }
+    override fun update(arg0: Observable, arg1: Any?) {
+        user_email_display.text = myModel!!.getValueAtIndex(0)
     }
 
     private fun backToRecyclerView() {
@@ -145,4 +164,7 @@ private fun getProfileInfo() {
         val intent = Intent(this, LogInScreen::class.java)
         startActivity(intent)
     }
+
+
+
 }
