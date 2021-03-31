@@ -34,11 +34,10 @@ class CacheData {
                     cacheKey++
                 }
             }
-            getCacheData()
         }
     }
 
-    private fun getCacheData () :MutableList<Items> {
+     fun getCacheData () :MutableList<Items> {
         val mapper = jacksonObjectMapper()
         var position = 0
         for (i in cacheItemJson) {

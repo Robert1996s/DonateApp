@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.donateapp.DataClasses.Items
@@ -21,6 +22,7 @@ import com.example.donateapp.R
 import com.example.donateapp.Models.FirebaseData
 import com.example.donateapp.Models.GlobalItemList
 import com.example.donateapp.Models.GlobalUserItems
+import com.example.donateapp.Models.testModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_profile_screen.*
@@ -35,9 +37,9 @@ class ProfileScreen() : AppCompatActivity(), java.util.Observer {
     private var uid = ""
     //var imageLink = ""
     private var data = ""
-    private val model: NameViewModel by viewModels()
-    var myModel: Model? = null
-
+    //private val model: NameViewModel by viewModels()
+    lateinit var myModel: Model
+    private val model: testModel by viewModels()
 
 
 
@@ -66,15 +68,40 @@ class ProfileScreen() : AppCompatActivity(), java.util.Observer {
         //model.currentName.observe(this, nameObserver)
 
 
+        testModel().currentUserEmail.observe(this, Observer { newValue ->
+            userEmail.text = newValue.toString()
+        })
 
-        myModel = Model()
-        myModel!!.getData(uid)
-        myModel!!.addObserver(this)
+        //println("!!! VÄRDE:" ${testModel()._currentUserEmail})
 
 
 
+        lifecycleScope.launchWhenStarted {
+            userEmail.text = Model().getData(uid)
+            println("!!! coruitine + ${data}")
+        }
 
-        println("!!!DATA: ${myModel}")
+
+
+        val nameObserver = Observer<String> { newName ->
+            userEmail.text = newName
+        }
+
+        //model.currentName.observe(this, nameObserver)
+
+
+        //model.currentName.setValue("hej")
+
+        //myModel.testString.observe(this, nameObserver)
+
+       // println("!!! testString: ${model.currentName}")
+        
+        /*Model().addObserver(this)
+        var userInfo = Model().getData(uid)
+        println("!!! Data from update: ${userInfo}") */
+
+
+
 
 
         if (GlobalUserItems.globalUserItemList.size > 0) {
@@ -88,17 +115,15 @@ class ProfileScreen() : AppCompatActivity(), java.util.Observer {
         threadBtn.setOnClickListener {
             val thread = Thread(Runnable {
                 println("!!!Thread Sleep")
-                //Thread.sleep(5000)
+                Thread.sleep(5000)
                 println("!!!Thread Woke UP")
                 //val otherValue = "New Value"
                 //model.currentName.setValue(otherValue)
-
             })
-
             thread.start()
             //backToRecyclerView()
         }
-
+        
         //observerData()
 
         val adapter = ProfileListAdapter(this, GlobalUserItems.globalUserItemList)
@@ -147,9 +172,9 @@ class ProfileScreen() : AppCompatActivity(), java.util.Observer {
     } // ON CREATE
 
 
-
     override fun update(arg0: Observable, arg1: Any?) {
-        user_email_display.text = myModel!!.getValueAtIndex(0)
+        var userInfo = Model().getData(uid)
+        println("!!! Data from update: ${userInfo}")
     }
 
     private fun backToRecyclerView() {

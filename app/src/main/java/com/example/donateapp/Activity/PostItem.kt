@@ -29,7 +29,6 @@ class PostItem : AppCompatActivity() {
     private var uid = ""
     private var firebaseStorage: FirebaseStorage? = null
     private var storageReference: StorageReference? = null
-    //private lateinit var job: CompletableJob
 
     companion object {
         private val IMAGE_PICK_CODE = 1000
@@ -61,7 +60,6 @@ class PostItem : AppCompatActivity() {
         }
 
     } // ON CREATE
-
 
 
     private fun addDonatePost() {

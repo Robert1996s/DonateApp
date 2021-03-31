@@ -1,22 +1,17 @@
 package com.example.donateapp.Models
 
-import android.content.Context
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import com.example.donateapp.Activity.ProfileScreen
+import com.bumptech.glide.load.engine.Resource
 import com.example.donateapp.DataClasses.Items
+import com.example.donateapp.DataClasses.Model
 import com.example.donateapp.DataClasses.UserData
-import com.example.donateapp.ItemAdapter
-import com.example.donateapp.R
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.*
 
 class FirebaseData {
 
 
     lateinit var db: FirebaseFirestore
-    lateinit var userInfo: UserData
-    var userNameText = ""
-    var userEmailText = ""
+
 
     fun getUserItemsData(uid: String) {
         db = FirebaseFirestore.getInstance()
@@ -29,6 +24,7 @@ class FirebaseData {
                     if (item != null) {
                         GlobalUserItems.globalUserItemList.add(item)
                         println("!!! MY ITEMS: ${item.title}")
+
                     }
                 }
             }
@@ -43,8 +39,6 @@ class FirebaseData {
             adress)
             db.collection("items").add(item)
             db.collection("users").document(uid).collection("userItems").add(item)
-            GlobalItemList.globalItemList.add(item)
-            GlobalUserItems.globalUserItemList.add(item)
     }
 
     fun getItemsData() {
@@ -64,7 +58,10 @@ class FirebaseData {
         }
     }
 
-     fun getProfileInfo(uid: String): UserData {
+     fun getProfileInfo(uid: String): String {
+
+         //var userNameText = ""
+         var userEmailText = ""
 
         db = FirebaseFirestore.getInstance()
         val docRef = db.collection("users").document(uid)
@@ -73,21 +70,28 @@ class FirebaseData {
                 if (task.isSuccessful){
                     val document = task.result
                     if (document!!.exists()) {
-                        println("!!!Data: ${document.data}")
-                        val userInfo = document.toObject(UserData::class.java)
+                        println("!!!Firebase Data: ${document.data}")
+                        val userInfo = document.toObject(UserData::class.java)!!
 
-                        userNameText = userInfo!!.display_name.toString()
-                        userEmailText = userInfo.email.toString()
+                        //userNameText = userInfo!!.display_name.toString()
+                        testModel()._currentUserEmail.value = userInfo.email.toString()
+
+                        //Update funktion
+                        //println("!!! efter nytt satt värde^${userNameText}") //Works
+                        println("!!!efter nytt satt värde^ ${userEmailText}") //Works
                     }
                     else {
                         println("!!! Get profile data went wrong")
                     }
                 }
+                //println("!!!OUTSIDE${userEmailText + userNameText}") // Works
+
             }
-         return userInfo
+         return userEmailText
+          //No value when return
     }
 
-    fun getDataOnce () {
+    fun getItemsOnce () {
         db = FirebaseFirestore.getInstance()
         val docRef = db.collection("items")
         docRef.get()

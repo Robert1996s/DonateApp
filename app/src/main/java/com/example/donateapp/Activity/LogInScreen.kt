@@ -36,11 +36,6 @@ class LogInScreen : AppCompatActivity() {
 
 
 
-
-
-
-
-
         loginButton.setOnClickListener {
             val emailInput = emailInput.text.toString()
             val passwordInput = passwordInput.text.toString()
@@ -58,10 +53,10 @@ class LogInScreen : AppCompatActivity() {
             toFirstPage()
         }
         else
-    {
-        //Not logged in
+        {
+        toUserSignUp()
         println("!!! NOT Logged IN")
-    }
+        }
 
         if (NetworkHandler.isOnline(this)) {
             Toast.makeText(this, "Welcome ${currentUser?.email}", Toast.LENGTH_LONG).show()
@@ -75,6 +70,11 @@ class LogInScreen : AppCompatActivity() {
 
     private fun toFirstPage() {
         val intent = Intent(this, FirstPage::class.java)
+        startActivity(intent)
+    }
+
+    private fun tologIn() {
+        val intent = Intent(this, LogInScreen::class.java)
         startActivity(intent)
     }
 

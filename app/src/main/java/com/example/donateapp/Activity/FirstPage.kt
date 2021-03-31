@@ -11,11 +11,13 @@ import android.os.Build
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.donateapp.*
 import com.example.donateapp.DataClasses.Items
+import com.example.donateapp.DataClasses.UserData
 import com.example.donateapp.Models.*
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -23,7 +25,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.fasterxml.jackson.module.kotlin.*
-import org.json.JSONObject
 import java.util.Observer
 
 class FirstPage : AppCompatActivity() {
@@ -39,32 +40,24 @@ class FirstPage : AppCompatActivity() {
     private var cacheItemJson = mutableListOf<String>()
     private var whichList = mutableListOf<Items>()
 
-
-
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_page)
 
-        FirebaseData().getItemsData()
 
+        val str = UserData().display_name
 
-        if (GlobalItemList.globalItemList.size > 0) {
-            println("!!!Already Have items")
-        } else {
-            FirebaseData().getDataOnce()
-            println("!!!ELSE")
-        }
 
         println("!!! LIST SIZE FIRST PAGE: ${GlobalItemList.globalItemList.size}")
 
         if (NetworkHandler.isOnline(this)) {
-            whichList = GlobalItemList.globalItemList
-            Toast.makeText(this, "FIREBASE DATA", Toast.LENGTH_LONG).show()
-        } else {
+            FirebaseData().getItemsData()
             CacheData().cacheData()
+            whichList = GlobalItemList.globalItemList
+        } else {
+            cacheItemList = CacheData().getCacheData()
             whichList = cacheItemList
-            Toast.makeText(this, "CACHE LIST", Toast.LENGTH_LONG).show()
         }
 
         auth = FirebaseAuth.getInstance()
@@ -119,6 +112,7 @@ class FirstPage : AppCompatActivity() {
             }
         }
     } // ON CREATE
+
 
     private fun addPost() {
         val intent = Intent(this, PostItem::class.java)
