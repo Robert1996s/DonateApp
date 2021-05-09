@@ -1,19 +1,36 @@
 package com.example.donateapp.Models
 
+import android.os.Handler
+import androidx.activity.viewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import com.bumptech.glide.load.engine.Resource
-import com.example.donateapp.DataClasses.Items
-import com.example.donateapp.DataClasses.Model
-import com.example.donateapp.DataClasses.UserData
+import com.example.donateapp.DataClasses.*
 import com.google.firebase.firestore.FirebaseFirestore
-import java.util.*
 
-class FirebaseData {
+import kotlinx.coroutines.*
+
+class FirebaseData () {
 
 
     lateinit var db: FirebaseFirestore
 
+    private lateinit var model: Model
 
-    fun getUserItemsData(uid: String) {
+     var userEmailText = MutableLiveData<String>()
+
+    fun getEmail(): LiveData<String>{
+        return userEmailText
+    }
+
+     fun getUserItemsData(uid: String)  {
+
+
+
+
+
         db = FirebaseFirestore.getInstance()
         val docRef = db.collection("users").document(uid).collection("userItems")
         docRef.addSnapshotListener { snapshot, e ->
@@ -28,7 +45,10 @@ class FirebaseData {
                     }
                 }
             }
+
         }
+
+
     }
 
     fun postData(title: String, description: String, adress: String, uid: String)  {
@@ -58,38 +78,60 @@ class FirebaseData {
         }
     }
 
-     fun getProfileInfo(uid: String): String {
 
-         //var userNameText = ""
-         var userEmailText = ""
+
+
+     fun getProfileInfo(uid: String)  {
+
 
         db = FirebaseFirestore.getInstance()
         val docRef = db.collection("users").document(uid)
         docRef.get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful){
+
+
                     val document = task.result
                     if (document!!.exists()) {
                         println("!!!Firebase Data: ${document.data}")
                         val userInfo = document.toObject(UserData::class.java)!!
 
-                        //userNameText = userInfo!!.display_name.toString()
-                        testModel()._currentUserEmail.value = userInfo.email.toString()
+                        userEmailText.value = userInfo.email
 
-                        //Update funktion
-                        //println("!!! efter nytt satt värde^${userNameText}") //Works
-                        println("!!!efter nytt satt värde^ ${userEmailText}") //Works
+                        //stringObs().stringEmail = userInfo.email.toString()
+
+                        //Model().userEmail(userInfo.email.toString())
+
+
+                        //userNameText = userInfo!!.display_name.toString()
+                        //userEmailText = userInfo.email.toString()
+
+                        //testModel().currentUserEmail = userInfo.email.toString()
+
+                        ///OBSERVE HÄR??
+
+                        //Model().userEmail() = userInfo.email
+
+
                     }
                     else {
                         println("!!! Get profile data went wrong")
                     }
-                }
-                //println("!!!OUTSIDE${userEmailText + userNameText}") // Works
+
+
+
+
+
 
             }
-         return userEmailText
+
+
+
           //No value when return
     }
+
+
+     }
 
     fun getItemsOnce () {
         db = FirebaseFirestore.getInstance()

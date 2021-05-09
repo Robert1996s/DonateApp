@@ -43,8 +43,6 @@ class ProfileScreen() : AppCompatActivity(), java.util.Observer {
     private var data = ""
 
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_screen)
@@ -67,7 +65,7 @@ class ProfileScreen() : AppCompatActivity(), java.util.Observer {
 
         val viewModel = ViewModelProvider(this).get(Model::class.java)
 
-         viewModel.getFirebaseData(uid)
+        viewModel.getFirebaseData(uid)
 
 
         viewModel.userEmail().observe(this, Observer {

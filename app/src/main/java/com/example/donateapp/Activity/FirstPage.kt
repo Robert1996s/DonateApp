@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.donateapp.*
 import com.example.donateapp.DataClasses.Items
+import com.example.donateapp.DataClasses.Model
 import com.example.donateapp.DataClasses.UserData
 import com.example.donateapp.Models.*
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -39,6 +40,7 @@ class FirstPage : AppCompatActivity() {
     private var cacheItemList = mutableListOf<Items>()
     private var cacheItemJson = mutableListOf<String>()
     private var whichList = mutableListOf<Items>()
+    private lateinit var viewModel: Model
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +48,10 @@ class FirstPage : AppCompatActivity() {
         setContentView(R.layout.activity_first_page)
 
 
-        val str = UserData().display_name
+
+
+
+
 
 
         println("!!! LIST SIZE FIRST PAGE: ${GlobalItemList.globalItemList.size}")
@@ -96,6 +101,8 @@ class FirstPage : AppCompatActivity() {
         if (currentUser != null) {
             uid = auth.currentUser!!.uid
         }
+
+
 
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
         bottomNavigation.setOnNavigationItemSelectedListener { item ->

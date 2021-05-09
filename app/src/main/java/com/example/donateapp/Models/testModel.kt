@@ -16,9 +16,4 @@ class testModel : ViewModel() {
     }
 
 
-    fun getData(uid :String): String {
-        var userEmail = FirebaseData().getProfileInfo(uid)
-        println("!!!getDATA: ${userEmail}")
-        return userEmail
-    }
 }

@@ -51,12 +51,10 @@ class LogInScreen : AppCompatActivity() {
 
         if (currentUser != null) {
             toFirstPage()
+        } else {
+            toUserSignUp()
         }
-        else
-        {
-        toUserSignUp()
-        println("!!! NOT Logged IN")
-        }
+
 
         if (NetworkHandler.isOnline(this)) {
             Toast.makeText(this, "Welcome ${currentUser?.email}", Toast.LENGTH_LONG).show()
@@ -64,7 +62,7 @@ class LogInScreen : AppCompatActivity() {
             println("!!! NO Internet")
             Toast.makeText(this, "Internet Trouble?", Toast.LENGTH_LONG).show()
         }
-        println("!!!Logged In As: ${auth.currentUser?.email}")
+        //println("!!!Logged In As: ${auth.currentUser?.email}")
         finish()
     } //ON CREATE
 
