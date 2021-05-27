@@ -48,12 +48,6 @@ class FirstPage : AppCompatActivity() {
         setContentView(R.layout.activity_first_page)
 
 
-
-
-
-
-
-
         println("!!! LIST SIZE FIRST PAGE: ${GlobalItemList.globalItemList.size}")
 
         if (NetworkHandler.isOnline(this)) {
@@ -101,7 +95,6 @@ class FirstPage : AppCompatActivity() {
         if (currentUser != null) {
             uid = auth.currentUser!!.uid
         }
-
 
 
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)

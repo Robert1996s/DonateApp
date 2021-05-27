@@ -28,9 +28,6 @@ class FirebaseData () {
      fun getUserItemsData(uid: String)  {
 
 
-
-
-
         db = FirebaseFirestore.getInstance()
         val docRef = db.collection("users").document(uid).collection("userItems")
         docRef.addSnapshotListener { snapshot, e ->
@@ -97,22 +94,6 @@ class FirebaseData () {
                         val userInfo = document.toObject(UserData::class.java)!!
 
                         userEmailText.value = userInfo.email
-
-                        //stringObs().stringEmail = userInfo.email.toString()
-
-                        //Model().userEmail(userInfo.email.toString())
-
-
-                        //userNameText = userInfo!!.display_name.toString()
-                        //userEmailText = userInfo.email.toString()
-
-                        //testModel().currentUserEmail = userInfo.email.toString()
-
-                        ///OBSERVE HÄR??
-
-                        //Model().userEmail() = userInfo.email
-
-
                     }
                     else {
                         println("!!! Get profile data went wrong")
